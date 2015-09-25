@@ -3,6 +3,7 @@ package com.icer.cnbeta.app;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -39,7 +40,22 @@ public class BaseActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
     }
 
-    public void toast(String text) {
+    public void logI(String tag, String log) {
+        if (AppConfig.IS_DEBUG_MODE)
+            Log.i(tag, log);
+    }
+
+    public void logW(String tag, String log) {
+        if (AppConfig.IS_DEBUG_MODE)
+            Log.w(tag, log);
+    }
+
+    public void logE(String tag, String log) {
+        if (AppConfig.IS_DEBUG_MODE)
+            Log.e(tag, log);
+    }
+
+    public void showToast(String text) {
         if (mToast != null)
             mToast.cancel();
         mToast = Toast.makeText(this, text, Toast.LENGTH_SHORT);

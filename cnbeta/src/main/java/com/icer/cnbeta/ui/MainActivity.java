@@ -2,22 +2,21 @@ package com.icer.cnbeta.ui;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.icer.cnbeta.R;
-import com.icer.cnbeta.app.AppApplication;
 import com.icer.cnbeta.app.BaseActivity;
-import com.icer.cnbeta.util.URLUtil;
+import com.icer.cnbeta.manager.RequestManager;
 
 /**
  * Created by icer on 2015-09-24.
  */
 public class MainActivity extends BaseActivity implements View.OnClickListener {
+
+    public static final String TAG = MainActivity.class.getCanonicalName();
+    public static final int ID = TAG.hashCode();
 
     private Toolbar mToolbar;
 
@@ -36,6 +35,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onResume();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RequestManager.getInstance().cancelRequest(TAG);
+    }
+
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -47,26 +52,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toast("SlideMenu");
+                showToast("SlideMenu");
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.action_settings:
-                toast("settings");
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void initView() {
@@ -78,18 +66,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void requestLatest() {
-        StringRequest request = new StringRequest(URLUtil.getList(null), new Response.Listener<String>() {
+        RequestManager.getInstance().requestLatest(null, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                toast(s);
+                showToast(s);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        });
-        AppApplication.getInstance().getAppRequestQueue().add(request);
+        }, TAG);
     }
 
     @Override

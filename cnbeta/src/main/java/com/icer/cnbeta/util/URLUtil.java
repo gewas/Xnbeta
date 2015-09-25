@@ -14,7 +14,7 @@ public class URLUtil {
         String url = "http://api.cnbeta.com/capi?" + str + "&sign="
                 + Coder.coder(str + AppConstants.SECRET_KEY);
         if (AppConfig.IS_DEBUG_MODE)
-            Log.e(TAG, url);
+            Log.i(TAG, url);
         return url;
     }
 
