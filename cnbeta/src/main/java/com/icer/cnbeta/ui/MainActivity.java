@@ -53,6 +53,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onStop() {
         super.onStop();
         RequestManager.getInstance().cancelRequest(TAG);
+        stopRefresh();
     }
 
     private void initData() {
@@ -99,7 +100,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void onResponse(String s) {
                 logI(TAG, s);
                 LatestListBean latestListBean = JSON.parseObject(s, LatestListBean.class);
-                mAdapter.addData(latestListBean.result);
+                if (!mAdapter.refreshData(latestListBean.result))
+                    showToastLong(getString(R.string.hint_already_latest));
                 stopRefresh();
             }
         }, new Response.ErrorListener() {

@@ -52,9 +52,24 @@ public class LatestListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void refreshData(ArrayList<Latest> list) {
+    public boolean refreshData(ArrayList<Latest> list) {
         //»±…Ÿsid≈–∂œ
-        notifyDataSetChanged();
+        boolean res = false;
+        if (mData.size() == 0) {
+            addData(list);
+            res = true;
+        } else {
+            int count = list.size();
+            for (int i = 0; i < count; i++) {
+                if (list.get(0).sid.compareTo(mData.get(i).sid) > 0) {
+                    mData.add(i, list.remove(0));
+                    res = true;
+                } else
+                    break;
+            }
+            notifyDataSetChanged();
+        }
+        return res;
     }
 
     public void addData(ArrayList<Latest> list) {

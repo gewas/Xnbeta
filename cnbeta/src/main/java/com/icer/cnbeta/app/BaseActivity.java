@@ -63,6 +63,13 @@ public class BaseActivity extends AppCompatActivity {
         mToast.show();
     }
 
+    public void showToastLong(String text) {
+        if (mToast != null)
+            mToast.cancel();
+        mToast = Toast.makeText(this, text, Toast.LENGTH_LONG);
+        mToast.show();
+    }
+
     public float dp2px(float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }

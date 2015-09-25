@@ -1,5 +1,12 @@
 <resources>
+    <!-- title -->
     <string name="app_name">吹牛Beta</string>
+
+    <!-- subtitle -->
     <string name="subtitle_latest">最新资讯</string>
+
+
+    <!-- hint -->
+    <string name="hint_already_latest">小编都赶不上您的阅读速度啦T_T</string>
 
 </resources>
