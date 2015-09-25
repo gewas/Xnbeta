@@ -1,6 +1,8 @@
 package com.icer.cnbeta.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -13,12 +15,13 @@ import com.icer.cnbeta.manager.RequestManager;
 /**
  * Created by icer on 2015-09-24.
  */
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = MainActivity.class.getCanonicalName();
     public static final int ID = TAG.hashCode();
 
     private Toolbar mToolbar;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initView() {
-
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
     }
 
     private void initToolBar() {
@@ -68,7 +71,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void regListener() {
-
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     private void requestLatest() {
@@ -90,5 +93,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (v.getId()) {
 
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 1000);
     }
 }
