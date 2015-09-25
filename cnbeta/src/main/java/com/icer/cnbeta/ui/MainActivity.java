@@ -61,6 +61,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void initView() {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setProgressViewOffset(true, -dp2pxInt(24), dp2pxInt(64));
         mListView = (ListView) findViewById(R.id.list);
     }
 
@@ -91,6 +92,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void requestLatest() {
+        if (!mSwipeRefreshLayout.isRefreshing())
+            startRefresh();
         RequestManager.getInstance().requestLatest(null, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -106,6 +109,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 stopRefresh();
             }
         }, TAG);
+    }
+
+    private void startRefresh() {
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     private void stopRefresh() {

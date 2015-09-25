@@ -12,9 +12,6 @@ import com.icer.cnbeta.volley.entity.Latest;
 
 import java.util.ArrayList;
 
-/**
- * Created by icer on 2015-09-25.
- */
 public class LatestListAdapter extends BaseAdapter {
 
     private Context mContext;
