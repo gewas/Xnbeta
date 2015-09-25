@@ -29,13 +29,13 @@ public class RequestManager {
         return appRequestManager;
     }
 
-    public void requestLatest(String lastSid, Response.Listener<String> listener, Response.ErrorListener errorListener, String tag) {
+    public void requestLatest(String lastSid, Response.Listener<String> listener, Response.ErrorListener errorListener, Object tag) {
         StringRequest request = new StringRequest(URLUtil.getList(lastSid), listener, errorListener);
         request.setTag(tag);
         mRequestQueue.add(request);
     }
 
-    public void cancelRequest(String tag) {
+    public void cancelRequest(Object tag) {
         mRequestQueue.cancelAll(tag);
     }
 

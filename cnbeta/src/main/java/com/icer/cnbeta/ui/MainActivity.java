@@ -1,16 +1,18 @@
 package com.icer.cnbeta.ui;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ListView;
 
+import com.alibaba.fastjson.JSON;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.icer.cnbeta.R;
 import com.icer.cnbeta.app.BaseActivity;
 import com.icer.cnbeta.manager.RequestManager;
+import com.icer.cnbeta.volley.LatestListBean;
 
 /**
  * Created by icer on 2015-09-24.
@@ -22,6 +24,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private Toolbar mToolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void initView() {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mListView = (ListView) findViewById(R.id.list);
     }
 
     private void initToolBar() {
@@ -78,14 +82,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         RequestManager.getInstance().requestLatest(null, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                showToast(s);
+                logI(TAG, s);
+                LatestListBean latestListBean = JSON.parseObject(s, LatestListBean.class);
+                logI(TAG, latestListBean.toString());
+                stopRefresh();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                logW(TAG, volleyError.toString());
+                stopRefresh();
             }
         }, TAG);
+    }
+
+    private void stopRefresh() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        requestLatest();
     }
 
     @Override
@@ -93,15 +110,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (v.getId()) {
 
         }
-    }
-
-    @Override
-    public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        }, 1000);
     }
 }
