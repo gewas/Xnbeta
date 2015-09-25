@@ -24,8 +24,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initToolBar();
+        initData();
         initView();
+        initToolBar();
         regListener();
         requestLatest();
     }
@@ -41,13 +42,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         RequestManager.getInstance().cancelRequest(TAG);
     }
 
+    private void initData() {
+
+    }
+
+    private void initView() {
+
+    }
+
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_launcher);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.color_white));
         mToolbar.setSubtitleTextColor(getResources().getColor(R.color.color_white));
-        mToolbar.setSubtitle("Demo");
+        mToolbar.setSubtitle(R.string.subtitle_latest);
         mToolbar.setOverflowIcon(getResources().getDrawable(android.R.drawable.ic_menu_more));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,9 +64,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 showToast("SlideMenu");
             }
         });
-    }
-
-    private void initView() {
 
     }
 

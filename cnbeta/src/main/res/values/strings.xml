@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">Cnbeta</string>
+    <string name="app_name">吹牛Beta</string>
+    <string name="subtitle_latest">最新资讯</string>
 
 </resources>
