@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="GlobalLayoutPaddingTop">
+        <item name="android:paddingTop">25dp</item>
+        <item name="android:background">@color/color_222222</item>
+    </style>
+
+    <style name="GlobalContentLayout">
+        <item name="android:background">@color/color_white</item>
+    </style>
+</resources>
