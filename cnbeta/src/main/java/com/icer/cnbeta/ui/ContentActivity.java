@@ -17,6 +17,7 @@ import com.icer.cnbeta.R;
 import com.icer.cnbeta.app.AppConstants;
 import com.icer.cnbeta.app.BaseActivity;
 import com.icer.cnbeta.manager.RequestManager;
+import com.icer.cnbeta.util.TextViewUtil;
 import com.icer.cnbeta.volley.ContentBean;
 
 /**
@@ -95,7 +96,7 @@ public class ContentActivity extends BaseActivity {
                 logI(TAG, s);
                 ContentBean contentBean = JSON.parseObject(s, ContentBean.class);
                 logI(TAG, contentBean.toString());
-                mSourceTv.setText(Html.fromHtml(mSourceTv.getText().toString() + contentBean.result.source));
+                TextViewUtil.setTextAfterColon(ContentActivity.this, mSourceTv, contentBean.result.source, true);
                 mDividerV.setVisibility(View.VISIBLE);
                 updateSummary(contentBean.result.hometext);
                 addWebView2ContentLayout(contentBean.result.bodytext);

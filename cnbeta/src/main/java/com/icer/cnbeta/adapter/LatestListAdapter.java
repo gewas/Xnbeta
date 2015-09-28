@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.icer.cnbeta.R;
 import com.icer.cnbeta.app.AppConstants;
 import com.icer.cnbeta.ui.ContentActivity;
+import com.icer.cnbeta.util.TextViewUtil;
 import com.icer.cnbeta.volley.entity.Latest;
 
 import java.util.ArrayList;
@@ -95,15 +97,21 @@ public class LatestListAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
+        private ImageView thumb;
+        private TextView info;
         private TextView title;
         private TextView summary;
 
         private void initView(View view) {
+            thumb = (ImageView) view.findViewById(R.id.item_thumb_iv);
+            info = (TextView) view.findViewById(R.id.item_info_tv);
             title = (TextView) view.findViewById(R.id.item_title_tv);
             summary = (TextView) view.findViewById(R.id.item_summary_tv);
         }
 
         private void fillInData(Latest bean) {
+            info.setText(R.string.item_info);//重要的一步
+            TextViewUtil.setSubColorText(mContext, info, null, R.color.color_333333, bean.comments, bean.score, bean.score_story);
             title.setText(bean.title);
             summary.setText(bean.summary);
         }

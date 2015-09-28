@@ -2,11 +2,17 @@
     <!-- title -->
     <string name="app_name">cnBeta-</string>
 
+    <!-- universal -->
+    <string name="colon">：</string>
+
     <!-- subtitle -->
     <string name="subtitle_latest">最新资讯</string>
     <string name="subtitle_content">资讯详情</string>
 
-    <!-- factors -->
+    <!-- list item factors -->
+    <string name="item_info">评论：%1$s 条&#160;&#160;&#160;&#160;事件分：%2$s 分&#160;&#160;&#160;&#160;质量分：%3$s 分</string>
+
+    <!-- content factors -->
     <string name="content_source">稿源：</string>
 
     <!-- hint -->

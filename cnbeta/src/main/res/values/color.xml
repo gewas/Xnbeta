@@ -6,4 +6,6 @@
     <color name="color_black">#000000</color>
     <color name="color_trans_black">#55000000</color>
     <color name="color_333333">#333333</color>
+    <color name="color_666666">#666666</color>
+    <color name="color_999999">#999999</color>
 </resources>
