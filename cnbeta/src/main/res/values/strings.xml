@@ -1,11 +1,10 @@
 <resources>
     <!-- title -->
-    <string name="app_name">XnBeta</string>
+    <string name="app_name">cnBeta-</string>
 
     <!-- subtitle -->
     <string name="subtitle_latest">最新资讯</string>
     <string name="subtitle_content">资讯详情</string>
-
 
     <!-- hint -->
     <string name="hint_already_latest">小编罢工了啦（╯‵□′）╯︵┴─┴</string>
