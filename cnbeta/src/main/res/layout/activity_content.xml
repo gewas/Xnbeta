@@ -41,21 +41,36 @@
                 android:textColor="@color/color_333333"
                 android:textSize="12sp"/>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_above="@+id/content_summary_tv"
+                android:background="@color/color_trans_black"/>
+
             <TextView
                 android:id="@+id/content_summary_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/content_pubtime_tv"
-                android:background="@drawable/bg_content_summary"
-                android:padding="6.67dp"
+                android:paddingLeft="6.67dp"
+                android:paddingRight="6.67dp"
+                android:paddingTop="13.33dp"
                 android:textColor="@color/color_333333"
-                android:textSize="12sp"/>
+                android:textSize="14sp"/>
+
+            <View
+                android:id="@+id/content_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignBottom="@id/content_summary_tv"
+                android:background="@color/color_trans_black"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/content_ll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/content_summary_tv"
+                android:layout_below="@id/content_divider"
                 android:orientation="vertical"
                 android:paddingBottom="6.67dp"
                 android:paddingTop="6.67dp"/>

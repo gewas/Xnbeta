@@ -12,6 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.icer.cnbeta.R;
 import com.icer.cnbeta.adapter.LatestListAdapter;
+import com.icer.cnbeta.app.AppConstants;
 import com.icer.cnbeta.app.BaseActivity;
 import com.icer.cnbeta.manager.RequestManager;
 import com.icer.cnbeta.volley.LatestListBean;
@@ -99,6 +100,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 logW(TAG, volleyError.toString());
+                showToast(AppConstants.HINT_LOADING_FAILED);
                 stopRefresh();
             }
         }, TAG);

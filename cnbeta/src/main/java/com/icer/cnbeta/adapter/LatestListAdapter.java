@@ -84,7 +84,6 @@ public class LatestListAdapter extends BaseAdapter {
         intent.putExtra(AppConstants.SID, mData.get(position).sid);
         intent.putExtra(AppConstants.TITLE, mData.get(position).title);
         intent.putExtra(AppConstants.PUBTIME, mData.get(position).pubtime);
-        intent.putExtra(AppConstants.SUMMARY, mData.get(position).summary);
         mContext.startActivity(intent);
     }
 

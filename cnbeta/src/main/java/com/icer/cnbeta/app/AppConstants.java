@@ -9,4 +9,8 @@ public interface AppConstants {
     String TITLE = "title";
     String PUBTIME = "pubtime";
     String SUMMARY = "summary";
+
+
+    //hint
+    String HINT_LOADING_FAILED = "Loading Failed...";
 }
