@@ -6,6 +6,9 @@
     <string name="subtitle_latest">最新资讯</string>
     <string name="subtitle_content">资讯详情</string>
 
+    <!-- factors -->
+    <string name="content_source">稿源：</string>
+
     <!-- hint -->
     <string name="hint_already_latest">小编罢工了啦（╯‵□′）╯︵┴─┴</string>
     <string name="hint_loading_more">加载更多(๑و•̀ω•́)و</string>

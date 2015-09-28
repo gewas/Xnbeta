@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/item_title_tv"
         android:layout_marginTop="6.67dp"
+        android:ellipsize="end"
         android:lineSpacingMultiplier="1.2"
         android:maxLines="3"
         android:paddingBottom="6.67dp"

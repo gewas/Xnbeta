@@ -29,6 +29,7 @@ public class ContentActivity extends BaseActivity {
 
     private Toolbar mToolbar;
     private TextView mTitleTv;
+    private TextView mSourceTv;
     private TextView mPubtimeTv;
     private TextView mSummaryTv;
     private View mDividerV;
@@ -37,7 +38,6 @@ public class ContentActivity extends BaseActivity {
     private String mSid;
     private String mTitle;
     private String mPubtime;
-    private String mSummary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +66,12 @@ public class ContentActivity extends BaseActivity {
         mSid = intent.getStringExtra(AppConstants.SID);
         mTitle = intent.getStringExtra(AppConstants.TITLE);
         mPubtime = intent.getStringExtra(AppConstants.PUBTIME);
-        mSummary = intent.getStringExtra(AppConstants.SUMMARY);
     }
 
     private void initView() {
         mTitleTv = (TextView) findViewById(R.id.content_title_tv);
         mTitleTv.setText(mTitle);
+        mSourceTv = (TextView) findViewById(R.id.content_source_tv);
         mPubtimeTv = (TextView) findViewById(R.id.content_pubtime_tv);
         mPubtimeTv.setText(mPubtime);
         mSummaryTv = (TextView) findViewById(R.id.content_summary_tv);
@@ -95,6 +95,7 @@ public class ContentActivity extends BaseActivity {
                 logI(TAG, s);
                 ContentBean contentBean = JSON.parseObject(s, ContentBean.class);
                 logI(TAG, contentBean.toString());
+                mSourceTv.setText(Html.fromHtml(mSourceTv.getText().toString() + contentBean.result.source));
                 mDividerV.setVisibility(View.VISIBLE);
                 updateSummary(contentBean.result.hometext);
                 addWebView2ContentLayout(contentBean.result.bodytext);

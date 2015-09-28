@@ -26,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:paddingBottom="6.67dp"
                 android:textColor="@color/color_333333"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -38,6 +39,18 @@
                 android:layout_below="@id/content_title_tv"
                 android:paddingBottom="6.67dp"
                 android:paddingRight="6.67dp"
+                android:textColor="@color/color_333333"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/content_source_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/content_title_tv"
+                android:paddingBottom="6.67dp"
+                android:paddingLeft="6.67dp"
+                android:text="@string/content_source"
                 android:textColor="@color/color_333333"
                 android:textSize="12sp"/>
 
