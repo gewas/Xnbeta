@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    style="@style/GlobalLayoutPaddingTop"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ScrollView
+        style="@style/GlobalContentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="13.33dp">
+
+            <TextView
+                android:id="@+id/content_title_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="@color/color_333333"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/content_pubtime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/content_title_tv"
+                android:paddingBottom="6.67dp"
+                android:paddingRight="6.67dp"
+                android:textColor="@color/color_333333"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/content_summary_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/content_pubtime_tv"
+                android:background="@drawable/bg_content_summary"
+                android:padding="6.67dp"
+                android:textColor="@color/color_333333"
+                android:textSize="12sp"/>
+
+            <LinearLayout
+                android:id="@+id/content_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/content_summary_tv"
+                android:orientation="vertical"
+                android:paddingBottom="6.67dp"
+                android:paddingTop="6.67dp"/>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

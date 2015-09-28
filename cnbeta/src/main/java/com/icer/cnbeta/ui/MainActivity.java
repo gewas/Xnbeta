@@ -90,6 +90,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             public void onResponse(String s) {
                 logI(TAG, s);
                 LatestListBean latestListBean = JSON.parseObject(s, LatestListBean.class);
+                logI(TAG, latestListBean.toString());
                 if (!mAdapter.refreshData(latestListBean.result))
                     showToastLong(getString(R.string.hint_already_latest));
                 stopRefresh();

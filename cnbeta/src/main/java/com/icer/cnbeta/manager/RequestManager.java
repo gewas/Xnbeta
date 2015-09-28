@@ -35,6 +35,12 @@ public class RequestManager {
         mRequestQueue.add(request);
     }
 
+    public void requestContent(String sid, Response.Listener<String> listener, Response.ErrorListener errorListener, Object tag) {
+        StringRequest request = new StringRequest(URLUtil.getContent(sid), listener, errorListener);
+        request.setTag(tag);
+        mRequestQueue.add(request);
+    }
+
     public void cancelRequest(Object tag) {
         mRequestQueue.cancelAll(tag);
     }
