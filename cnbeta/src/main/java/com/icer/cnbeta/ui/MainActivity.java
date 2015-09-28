@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.alibaba.fastjson.JSON;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Created by icer on 2015-09-24.
  */
-public class MainActivity extends BaseActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
     public static final String TAG = MainActivity.class.getCanonicalName();
     public static final int ID = TAG.hashCode();
@@ -39,7 +40,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initData();
         initView();
         initAdapter();
-        initToolBar();
+        initActionBar();
         regListener();
         requestLatest();
     }
@@ -71,25 +72,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mListView.setAdapter(mAdapter);
     }
 
-    private void initToolBar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.ic_launcher);
-        mToolbar.setTitleTextColor(getResources().getColor(R.color.color_white));
-        mToolbar.setSubtitleTextColor(getResources().getColor(R.color.color_white));
-        mToolbar.setSubtitle(R.string.subtitle_latest);
-        mToolbar.setOverflowIcon(getResources().getDrawable(android.R.drawable.ic_menu_more));
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showToast("SlideMenu");
-            }
-        });
-
-    }
-
     private void regListener() {
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mListView.setOnItemClickListener(this);
+    }
+
+    private void initActionBar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setSubtitle(R.string.subtitle_latest);
     }
 
     private void requestLatest() {
@@ -127,9 +117,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-        }
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mAdapter.onItemClick(position);
     }
 }

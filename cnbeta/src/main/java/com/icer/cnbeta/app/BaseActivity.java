@@ -3,17 +3,24 @@ package com.icer.cnbeta.app;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.icer.cnbeta.R;
+
 /**
  * Created by icer on 2015-09-24.
  */
 public class BaseActivity extends AppCompatActivity {
+
+    private Toolbar mToolbar;
     private Toast mToast;
+    private boolean mIsToolBarInit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +29,37 @@ public class BaseActivity extends AppCompatActivity {
         setLayoutFullScreen();
     }
 
-    public void translucentSystemBar() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mIsToolBarInit) {
+            initToolBar();
+        }
+    }
+
+    private void initToolBar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+            mToolbar.setNavigationIcon(R.drawable.ic_launcher);
+            mToolbar.setTitleTextColor(getResources().getColor(R.color.color_white));
+            mToolbar.setSubtitleTextColor(getResources().getColor(R.color.color_white));
+            mToolbar.setOverflowIcon(getResources().getDrawable(android.R.drawable.ic_menu_more));
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showToast("Default");
+                }
+            });
+        }
+        mIsToolBarInit = true;
+    }
+
+    public Toolbar getToolbar() {
+        return mToolbar;
+    }
+
+    private void translucentSystemBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -31,7 +68,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void setLayoutFullScreen() {
+    private void setLayoutFullScreen() {
         setSystemUIFlag(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 

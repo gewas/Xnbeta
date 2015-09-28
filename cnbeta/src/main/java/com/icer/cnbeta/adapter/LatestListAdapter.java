@@ -1,6 +1,7 @@
 package com.icer.cnbeta.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.icer.cnbeta.R;
+import com.icer.cnbeta.app.AppConstants;
+import com.icer.cnbeta.ui.ContentActivity;
 import com.icer.cnbeta.volley.entity.Latest;
 
 import java.util.ArrayList;
@@ -53,7 +56,6 @@ public class LatestListAdapter extends BaseAdapter {
     }
 
     public boolean refreshData(ArrayList<Latest> list) {
-        //»±…Ÿsid≈–∂œ
         boolean res = false;
         if (mData.size() == 0) {
             addData(list);
@@ -73,9 +75,17 @@ public class LatestListAdapter extends BaseAdapter {
     }
 
     public void addData(ArrayList<Latest> list) {
-        //»±…Ÿsid≈–∂œ
         mData.addAll(list);
         notifyDataSetChanged();
+    }
+
+    public void onItemClick(int position) {
+        Intent intent = new Intent(mContext, ContentActivity.class);
+        intent.putExtra(AppConstants.SID, mData.get(position).sid);
+        intent.putExtra(AppConstants.TITLE, mData.get(position).title);
+        intent.putExtra(AppConstants.PUBTIME, mData.get(position).pubtime);
+        intent.putExtra(AppConstants.SUMMARY, mData.get(position).summary);
+        mContext.startActivity(intent);
     }
 
     private class ViewHolder {
