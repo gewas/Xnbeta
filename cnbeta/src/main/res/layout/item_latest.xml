@@ -4,7 +4,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6.67dp"
                 android:layout_marginRight="6.67dp"
-                android:background="@drawable/bg_list_item"
                 android:paddingLeft="6.67dp"
                 android:paddingRight="6.67dp">
 
@@ -15,7 +14,8 @@
         android:paddingTop="6.67dp"
         android:singleLine="true"
         android:textColor="@color/color_333333"
-        android:textSize="18sp"/>
+        android:textSize="16sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/item_summary_tv"

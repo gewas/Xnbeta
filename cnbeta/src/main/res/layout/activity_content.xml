@@ -52,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/content_pubtime_tv"
+                android:lineSpacingMultiplier="1.1"
                 android:paddingLeft="6.67dp"
                 android:paddingRight="6.67dp"
                 android:paddingTop="13.33dp"
