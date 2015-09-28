@@ -87,6 +87,13 @@ public class LatestListAdapter extends BaseAdapter {
         mContext.startActivity(intent);
     }
 
+    public String getLastSid() {
+        if (mData.size() == 0)
+            return null;
+        else
+            return mData.get(mData.size() - 1).sid;
+    }
+
     private class ViewHolder {
         private TextView title;
         private TextView summary;

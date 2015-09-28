@@ -116,11 +116,11 @@ public class ContentActivity extends BaseActivity {
         WebView wv = new WebView(this);
         wv.getSettings().setJavaScriptEnabled(true);
         wv.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        wv.loadDataWithBaseURL(null, fixWebViewImage(fixWebViewIFrame(html)), "text/html", "utf-8", null);
+        wv.loadDataWithBaseURL(null, fixWebViewImage(fixWebViewWH(fixWebViewHW(html))), "text/html", "utf-8", null);
         mContentLl.addView(wv);
     }
 
-    private String fixWebViewIFrame(String htmlText) {
+    private String fixWebViewHW(String htmlText) {
         String res = htmlText;
         String[] segments = res.split("height=\"" + "[1-9][0-9]*\"" + " *width=\"" + "[1-9][0-9]+\"");
         if (segments.length > 1) {
@@ -131,10 +131,32 @@ public class ContentActivity extends BaseActivity {
                 String[] hw = param.split("=\"");
                 float tHeight = Float.parseFloat(hw[1].substring(0, hw[1].indexOf("\"")));
                 float tWidth = Float.parseFloat(hw[2].substring(0, hw[2].indexOf("\"")));
-                logI(TAG + " fixWebViewIFrame()", param);
-                logI(TAG + " fixWebViewIFrame()", "height:" + tHeight + " width:" + tWidth);
+                logI(TAG + " fixWebViewHW()", param);
+                logI(TAG + " fixWebViewHW()", "height:" + tHeight + " width:" + tWidth);
                 int fixedH = (int) (tHeight / (tWidth / (width / dp2px(1f))));
-                logI(TAG + " fixWebViewIFrame()", "fixed height:" + fixedH + " fixed width:" + ((int) (width / dp2px(1f))));
+                logI(TAG + " fixWebViewHW()", "fixed height:" + fixedH + " fixed width:" + ((int) (width / dp2px(1f))));
+                fixedHtmlText += "height=\"" + fixedH + "\"" + " width=\"" + ((int) (width / dp2px(1f))) + "\"" + segments[i + 1];
+            }
+            res = fixedHtmlText;
+        }
+        return res;
+    }
+
+    private String fixWebViewWH(String htmlText) {
+        String res = htmlText;
+        String[] segments = res.split("width=\"" + "[1-9][0-9]*\"" + " *height=\"" + "[1-9][0-9]+\"");
+        if (segments.length > 1) {
+            String fixedHtmlText = segments[0];
+            int width = (int) (mTitleTv.getMeasuredWidth() - dp2px(13.34f));
+            for (int i = 0; i < segments.length - 1; i++) {
+                String param = res.substring(fixedHtmlText.length() - segments.length, fixedHtmlText.length() + 32);
+                String[] hw = param.split("=\"");
+                float tWidth = Float.parseFloat(hw[1].substring(0, hw[1].indexOf("\"")));
+                float tHeight = Float.parseFloat(hw[2].substring(0, hw[2].indexOf("\"")));
+                logI(TAG + " fixWebViewWH()", param);
+                logI(TAG + " fixWebViewWH()", "height:" + tHeight + " width:" + tWidth);
+                int fixedH = (int) (tHeight / (tWidth / (width / dp2px(1f))));
+                logI(TAG + " fixWebViewWH()", "fixed height:" + fixedH + " fixed width:" + ((int) (width / dp2px(1f))));
                 fixedHtmlText += "height=\"" + fixedH + "\"" + " width=\"" + ((int) (width / dp2px(1f))) + "\"" + segments[i + 1];
             }
             res = fixedHtmlText;
