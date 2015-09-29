@@ -1,6 +1,6 @@
 <resources>
     <!-- title -->
-    <string name="app_name">cnBeta-</string>
+    <string name="app_name">cnBeta</string>
 
     <!-- universal -->
     <string name="colon">：</string>
