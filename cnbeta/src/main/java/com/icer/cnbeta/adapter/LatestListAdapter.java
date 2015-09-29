@@ -143,7 +143,7 @@ public class LatestListAdapter extends BaseAdapter {
                 RequestManager.getInstance().requestImage(bean.thumb, new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap bitmap) {
-                        FileManager.getInstance().saveBitmap2InternalStorage(mContext, bean.thumb.hashCode() + "", bitmap);
+                        FileManager.getInstance().saveBitmap2InternalStorage(mContext, bean.thumb, bitmap);
                         if (!((BaseActivity) mContext).isDestroyed() && thumb.getTag().equals(bean.thumb))
                             thumb.setImageBitmap(bitmap);
                     }

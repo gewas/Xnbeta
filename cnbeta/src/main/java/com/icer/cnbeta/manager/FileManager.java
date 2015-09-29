@@ -64,8 +64,8 @@ public class FileManager {
 //        }
 //    }
 
-    public void saveBitmap2InternalStorage(final Context context, String fileName, final Bitmap bitmap) {
-        final File file = new File(context.getFilesDir(), fileName);
+    public void saveBitmap2InternalStorage(final Context context, final String fileName, final Bitmap bitmap) {
+        final File file = new File(context.getFilesDir(), fileName.hashCode() + "");
         if (file.exists() && file.length() > 0)
             return;
         new AsyncTask<Boolean, Boolean, Boolean>() {
@@ -75,7 +75,14 @@ public class FileManager {
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    if (fileName.endsWith(".jpg") || fileName.endsWith(".JPG")
+                            || fileName.endsWith(".jpeg") || fileName.endsWith(".JPEG")) {
+                        ((BaseActivity) context).logI(TAG, "Bitmap " + fileName + " saved in type: JPEG");
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    } else {
+                        ((BaseActivity) context).logI(TAG, "Bitmap " + fileName + " saved in type: PNG");
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    }
                     res = true;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -94,7 +101,7 @@ public class FileManager {
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
                 if (aBoolean)
-                    ((BaseActivity) context).logI(TAG, "Bitmap saved in: " + file.getAbsolutePath());
+                    ((BaseActivity) context).logI(TAG, "Bitmap " + fileName + " saved in: " + file.getAbsolutePath());
             }
         }.execute();
     }

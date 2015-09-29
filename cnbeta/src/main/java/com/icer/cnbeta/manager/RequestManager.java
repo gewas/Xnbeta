@@ -50,7 +50,7 @@ public class RequestManager {
         String urlString = url;
         if (urlString.startsWith("/"))
             urlString = AppConstants.IMAGE_SITE + urlString;
-        ImageRequest request = new ImageRequest(urlString, listener, maxWidth, maxHeight, scaleType, Bitmap.Config.ARGB_4444, errorListener);
+        ImageRequest request = new ImageRequest(urlString, listener, maxWidth, maxHeight, scaleType, Bitmap.Config.ARGB_8888, errorListener);
         mRequestQueue.add(request);
     }
 
