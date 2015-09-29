@@ -61,6 +61,12 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         stopRefresh();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mIsRequesting = false;
+    }
+
     private void initData() {
 
     }
