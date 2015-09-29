@@ -124,16 +124,16 @@ public class ContentActivity extends BaseActivity {
 
     private String fixWebViewHW(String htmlText) {
         String res = htmlText;
-        String[] segments = res.split("height=\"" + "[1-9][0-9]*\"" + " *width=\"" + "[1-9][0-9]+\"");
+        String[] segments = res.split("height=\"" + "[1-9][0-9]{2}\"" + " width=\"" + "[1-9][0-9]{2}\"");
         if (segments.length > 1) {
             String fixedHtmlText = segments[0];
             int width = (int) (mTitleTv.getMeasuredWidth() - dp2px(13.34f));
             for (int i = 0; i < segments.length - 1; i++) {
-                String param = res.substring(fixedHtmlText.length() - segments.length, fixedHtmlText.length() + 32);
+                String param = res.substring(fixedHtmlText.length() - 1, fixedHtmlText.length() + 25);
                 String[] hw = param.split("=\"");
                 float tHeight = Float.parseFloat(hw[1].substring(0, hw[1].indexOf("\"")));
                 float tWidth = Float.parseFloat(hw[2].substring(0, hw[2].indexOf("\"")));
-                logI(TAG + " fixWebViewHW()", param);
+                logI(TAG + " fixWebViewHW()", "//" + param + "\\\\");
                 logI(TAG + " fixWebViewHW()", "height:" + tHeight + " width:" + tWidth);
                 int fixedH = (int) (tHeight / (tWidth / (width / dp2px(1f))));
                 logI(TAG + " fixWebViewHW()", "fixed height:" + fixedH + " fixed width:" + ((int) (width / dp2px(1f))));
@@ -146,16 +146,16 @@ public class ContentActivity extends BaseActivity {
 
     private String fixWebViewWH(String htmlText) {
         String res = htmlText;
-        String[] segments = res.split("width=\"" + "[1-9][0-9]*\"" + " *height=\"" + "[1-9][0-9]+\"");
+        String[] segments = res.split("width=\"" + "[1-9][0-9]{2}\"" + " height=\"" + "[1-9][0-9]{2}\"");
         if (segments.length > 1) {
             String fixedHtmlText = segments[0];
             int width = (int) (mTitleTv.getMeasuredWidth() - dp2px(13.34f));
             for (int i = 0; i < segments.length - 1; i++) {
-                String param = res.substring(fixedHtmlText.length() - segments.length, fixedHtmlText.length() + 32);
+                String param = res.substring(fixedHtmlText.length() - 1, fixedHtmlText.length() + 25);
                 String[] hw = param.split("=\"");
                 float tWidth = Float.parseFloat(hw[1].substring(0, hw[1].indexOf("\"")));
                 float tHeight = Float.parseFloat(hw[2].substring(0, hw[2].indexOf("\"")));
-                logI(TAG + " fixWebViewWH()", param);
+                logI(TAG + " fixWebViewWH()", "//" + param + "\\\\");
                 logI(TAG + " fixWebViewWH()", "height:" + tHeight + " width:" + tWidth);
                 int fixedH = (int) (tHeight / (tWidth / (width / dp2px(1f))));
                 logI(TAG + " fixWebViewWH()", "fixed height:" + fixedH + " fixed width:" + ((int) (width / dp2px(1f))));
