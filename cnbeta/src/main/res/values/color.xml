@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="color_lowest_bg">#669acc</color>
     <color name="color_white">#ffffff</color>
     <color name="color_eeeeee">#eeeeee</color>
     <color name="color_f0f0f0">#f0f0f0</color>

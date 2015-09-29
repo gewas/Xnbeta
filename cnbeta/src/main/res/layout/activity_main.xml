@@ -21,7 +21,7 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/color_trans_black"
+            android:divider="@color/color_lowest_bg"
             android:dividerHeight="6.67dp"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

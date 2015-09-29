@@ -55,16 +55,12 @@ public class BaseActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
+            mToolbar.setNavigationIcon(R.drawable.ic_launcher);
             mToolbar.setTitleTextColor(getResources().getColor(R.color.color_white));
             mToolbar.setSubtitleTextColor(getResources().getColor(R.color.color_white));
             mToolbar.setOverflowIcon(getResources().getDrawable(android.R.drawable.ic_menu_more));
         }
         mIsToolBarInit = true;
-    }
-
-    public void setToolbarNavigation(int drawableId, View.OnClickListener listener) {
-        mToolbar.setNavigationIcon(drawableId);
-        mToolbar.setNavigationOnClickListener(listener);
     }
 
     public Toolbar getToolbar() {

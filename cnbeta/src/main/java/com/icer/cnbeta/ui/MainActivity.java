@@ -90,7 +90,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
     private void initActionBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setSubtitle(R.string.subtitle_latest);
+        mToolbar.setTitle(R.string.subtitle_latest);
     }
 
     private void requestList(final String lastSid) {

@@ -97,7 +97,7 @@ public class ContentActivity extends BaseActivity {
 
     private void initActionBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setSubtitle(R.string.subtitle_content);
+        mToolbar.setTitle(R.string.subtitle_content);
     }
 
     private void requestContent() {
