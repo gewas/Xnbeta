@@ -2,6 +2,7 @@ package com.icer.cnbeta.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.icer.cnbeta.R;
 import com.icer.cnbeta.app.AppConstants;
+import com.icer.cnbeta.app.BaseActivity;
+import com.icer.cnbeta.manager.RequestManager;
 import com.icer.cnbeta.ui.ContentActivity;
 import com.icer.cnbeta.util.TextViewUtil;
 import com.icer.cnbeta.volley.entity.Latest;
@@ -110,10 +115,31 @@ public class LatestListAdapter extends BaseAdapter {
         }
 
         private void fillInData(Latest bean) {
-            info.setText(R.string.item_info);//重要的一步
+            loadImage(bean);
+            info.setText(R.string.item_info);//reset to initial state is important
             TextViewUtil.setSubColorText(mContext, info, null, R.color.color_333333, bean.comments, bean.score, bean.score_story);
             title.setText(bean.title);
             summary.setText(bean.summary);
+        }
+
+        private void loadImage(final Latest bean) {
+            thumb.setImageResource(R.drawable.ic_launcher);
+            thumb.setTag(bean.thumb);
+            int maxWidth = ((BaseActivity) mContext).dp2pxInt(80);
+            int maxHeight = ((BaseActivity) mContext).dp2pxInt(80);
+            RequestManager.getInstance().cancelRequest(thumb.hashCode());
+            RequestManager.getInstance().requestImage(bean.thumb, new Response.Listener<Bitmap>() {
+                @Override
+                public void onResponse(Bitmap bitmap) {
+                    if (thumb.getTag().equals(bean.thumb))
+                        thumb.setImageBitmap(bitmap);
+                }
+            }, maxWidth, maxHeight, ImageView.ScaleType.FIT_XY, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    ((BaseActivity) mContext).showToast(AppConstants.HINT_LOADING_FAILED);
+                }
+            }, thumb.hashCode());
         }
     }
 }
