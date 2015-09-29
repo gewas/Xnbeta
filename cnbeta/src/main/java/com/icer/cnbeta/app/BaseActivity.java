@@ -20,7 +20,8 @@ public class BaseActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Toast mToast;
     private boolean mIsToolBarInit;
-
+    private boolean mIsBackground = true;
+    private boolean mIsDestroyed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,28 +36,48 @@ public class BaseActivity extends AppCompatActivity {
         if (!mIsToolBarInit) {
             initToolBar();
         }
+        mIsBackground = false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mIsBackground = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mIsDestroyed = true;
     }
 
     private void initToolBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
-            mToolbar.setNavigationIcon(R.drawable.ic_launcher);
             mToolbar.setTitleTextColor(getResources().getColor(R.color.color_white));
             mToolbar.setSubtitleTextColor(getResources().getColor(R.color.color_white));
             mToolbar.setOverflowIcon(getResources().getDrawable(android.R.drawable.ic_menu_more));
-            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showToast("Default");
-                }
-            });
         }
         mIsToolBarInit = true;
     }
 
+    public void setToolbarNavigation(int drawableId, View.OnClickListener listener) {
+        mToolbar.setNavigationIcon(drawableId);
+        mToolbar.setNavigationOnClickListener(listener);
+    }
+
     public Toolbar getToolbar() {
         return mToolbar;
+    }
+
+    public boolean isBackground() {
+        return mIsBackground;
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return mIsDestroyed;
     }
 
     private void translucentSystemBar() {

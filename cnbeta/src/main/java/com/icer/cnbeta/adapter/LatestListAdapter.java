@@ -3,6 +3,7 @@ package com.icer.cnbeta.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +16,19 @@ import com.android.volley.VolleyError;
 import com.icer.cnbeta.R;
 import com.icer.cnbeta.app.AppConstants;
 import com.icer.cnbeta.app.BaseActivity;
+import com.icer.cnbeta.manager.FileManager;
 import com.icer.cnbeta.manager.RequestManager;
 import com.icer.cnbeta.ui.ContentActivity;
 import com.icer.cnbeta.util.TextViewUtil;
 import com.icer.cnbeta.volley.entity.Latest;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class LatestListAdapter extends BaseAdapter {
+
+    public static final String TAG = LatestListAdapter.class.getCanonicalName();
+    public static final int ID = TAG.hashCode();
 
     private Context mContext;
     private ArrayList<Latest> mData;
@@ -124,22 +130,29 @@ public class LatestListAdapter extends BaseAdapter {
 
         private void loadImage(final Latest bean) {
             thumb.setImageResource(R.drawable.ic_launcher);
-            thumb.setTag(bean.thumb);
-            int maxWidth = ((BaseActivity) mContext).dp2pxInt(80);
-            int maxHeight = ((BaseActivity) mContext).dp2pxInt(80);
-            RequestManager.getInstance().cancelRequest(thumb.hashCode());
-            RequestManager.getInstance().requestImage(bean.thumb, new Response.Listener<Bitmap>() {
-                @Override
-                public void onResponse(Bitmap bitmap) {
-                    if (thumb.getTag().equals(bean.thumb))
-                        thumb.setImageBitmap(bitmap);
-                }
-            }, maxWidth, maxHeight, ImageView.ScaleType.FIT_XY, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    ((BaseActivity) mContext).showToast(AppConstants.HINT_LOADING_FAILED);
-                }
-            }, thumb.hashCode());
+            File file = FileManager.getInstance().findFileWithinInternalStorage(mContext, bean.thumb.hashCode() + "");
+            if (file != null) {
+                ((BaseActivity) mContext).logI(TAG, "Loading image from internal storage: " + file.getAbsolutePath());
+                thumb.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+            } else {
+                thumb.setTag(bean.thumb);
+                int maxWidth = ((BaseActivity) mContext).dp2pxInt(80);
+                int maxHeight = ((BaseActivity) mContext).dp2pxInt(80);
+                RequestManager.getInstance().cancelRequest(thumb.hashCode());
+                RequestManager.getInstance().requestImage(bean.thumb, new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        FileManager.getInstance().saveBitmap2InternalStorage(mContext, bean.thumb.hashCode() + "", bitmap);
+                        if (!((BaseActivity) mContext).isDestroyed() && thumb.getTag().equals(bean.thumb))
+                            thumb.setImageBitmap(bitmap);
+                    }
+                }, maxWidth, maxHeight, ImageView.ScaleType.FIT_XY, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        ((BaseActivity) mContext).showToast(AppConstants.HINT_LOADING_FAILED);
+                    }
+                }, thumb.hashCode());
+            }
         }
     }
 }
