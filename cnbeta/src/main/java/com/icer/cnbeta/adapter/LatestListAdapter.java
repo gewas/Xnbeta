@@ -98,6 +98,7 @@ public class LatestListAdapter extends BaseAdapter {
         intent.putExtra(AppConstants.TITLE, mData.get(position).title);
         intent.putExtra(AppConstants.PUBTIME, mData.get(position).pubtime);
         mContext.startActivity(intent);
+        ((BaseActivity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     public String getLastSid() {
