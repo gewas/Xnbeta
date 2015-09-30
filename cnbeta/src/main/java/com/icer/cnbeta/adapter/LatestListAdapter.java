@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.icer.cnbeta.R;
 import com.icer.cnbeta.app.AppConstants;
 import com.icer.cnbeta.app.BaseActivity;
+import com.icer.cnbeta.db.DBHelper;
 import com.icer.cnbeta.manager.FileManager;
 import com.icer.cnbeta.manager.RequestManager;
 import com.icer.cnbeta.ui.ContentActivity;
@@ -32,6 +33,7 @@ public class LatestListAdapter extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<NewsInfo> mData;
+    private DBHelper mDBHelper;
 
     public LatestListAdapter(Context context, ArrayList<NewsInfo> data) {
         mContext = context;
@@ -88,16 +90,24 @@ public class LatestListAdapter extends BaseAdapter {
     }
 
     public void addData(ArrayList<NewsInfo> list) {
-        mData.addAll(list);
-        notifyDataSetChanged();
+        if (list != null && !list.isEmpty()) {
+            mData.addAll(list);
+            notifyDataSetChanged();
+        }
     }
 
     public void onItemClick(int position) {
-        mData.get(position).setIsRead(true);
+        NewsInfo newsInfo = mData.get(position);
+        if (mDBHelper == null)
+            mDBHelper = new DBHelper(mContext);
+        if (!newsInfo.isRead()) {
+            mDBHelper.updateNewsInfoIsRead(newsInfo);
+            newsInfo.setIsRead(true);
+        }
         Intent intent = new Intent(mContext, ContentActivity.class);
-        intent.putExtra(AppConstants.SID, mData.get(position).sid);
-        intent.putExtra(AppConstants.TITLE, mData.get(position).title);
-        intent.putExtra(AppConstants.PUBTIME, mData.get(position).pubtime);
+        intent.putExtra(AppConstants.SID, newsInfo.sid);
+        intent.putExtra(AppConstants.TITLE, newsInfo.title);
+        intent.putExtra(AppConstants.PUBTIME, newsInfo.pubtime);
         mContext.startActivity(intent);
         ((BaseActivity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         notifyDataSetChanged();

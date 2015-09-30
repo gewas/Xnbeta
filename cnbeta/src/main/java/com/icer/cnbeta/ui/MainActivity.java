@@ -51,7 +51,6 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         initActionBar();
         regListener();
         loadDataFromDB();
-        requestListFromNet(null);
     }
 
     @Override
@@ -101,7 +100,9 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     }
 
     private void loadDataFromDB() {
-        mDBHelper.getLatest20List();
+        mAdapter.addData(mDBHelper.getLocalNewsInfoList(null));
+        if (mAdapter.getCount() == 0)
+            requestListFromNet(null);
     }
 
     private void requestListFromNet(final String lastSid) {
@@ -113,17 +114,27 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 @Override
                 public void onResponse(String s) {
                     logI(TAG, s);
-                    NewsInfoListBean newsInfoListBean = JSON.parseObject(s, NewsInfoListBean.class);
-                    logI(TAG, newsInfoListBean.toString());
+                    final NewsInfoListBean newsInfoListBean = JSON.parseObject(s, NewsInfoListBean.class);
                     if (lastSid == null) {
-                        if (!mAdapter.refreshData(newsInfoListBean.result))
-                            showToastLong(getString(R.string.hint_already_latest));
-                        stopRefresh();
+                        mDBHelper.saveNewsInfoList(newsInfoListBean.result, new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!mAdapter.refreshData(newsInfoListBean.result))
+                                    showToastLong(getString(R.string.hint_already_latest));
+                                stopRefresh();
+                                mIsRequesting = false;
+                            }
+                        });
                     } else {
-                        showToast(getString(R.string.hint_loading_more_complete));
-                        mAdapter.addData(newsInfoListBean.result);
+                        mDBHelper.saveNewsInfoList(newsInfoListBean.result, new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.addData(mDBHelper.getLocalNewsInfoList(lastSid));
+                                showToast(getString(R.string.hint_loading_more_complete));
+                                mIsRequesting = false;
+                            }
+                        });
                     }
-                    mIsRequesting = false;
                 }
             }, new Response.ErrorListener() {
                 @Override

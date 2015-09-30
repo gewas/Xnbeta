@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
 import com.icer.cnbeta.app.AppConfig;
-import com.icer.cnbeta.volley.entity.Latest;
+import com.icer.cnbeta.volley.entity.NewsInfo;
 
 import java.util.ArrayList;
 
@@ -50,30 +50,36 @@ public class DBHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public ArrayList<Latest> getList() {
-        ArrayList<Latest> res = null;
-        Cursor cursor = mResolver.query(Uri.parse(DBProvider.URI_LIST), null, null, null, DBConstant.TableList.COLUMN_SID + " DESC");
+    public ArrayList<NewsInfo> getLocalNewsInfoList(String lastSid) {
+        ArrayList<NewsInfo> res = null;
+        String selection = null;
+        String[] selectionArgs = null;
+        if (lastSid != null) {
+            selection = DBConstant.TableList.COLUMN_SID + "<?";
+            selectionArgs = new String[]{lastSid};
+        }
+        Cursor cursor = mResolver.query(Uri.parse(DBProvider.URI_LIST), null, selection, selectionArgs, DBConstant.TableList.COLUMN_SID + " DESC");
         if (cursor != null) {
             int i = 0;
             while (cursor.moveToNext()) {
                 if (res == null) res = new ArrayList<>();
                 if (i == 20) break;
-                Latest latest = new Latest();
-                latest.sid = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SID));
-                latest.title = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TITLE));
-                latest.pubtime = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_PUBTIME));
-                latest.summary = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SUMMARY));
-                latest.topic = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TOPIC));
-                latest.counter = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_COUNTER));
-                latest.comments = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_COMMENTS));
-                latest.ratings = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_RATINGS));
-                latest.score = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SCORE));
-                latest.ratings_story = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_RATINGS_STORY));
-                latest.score_story = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SCORE_STORY));
-                latest.topic_logo = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TOPIC_LOGO));
-                latest.thumb = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_THUMB));
-                latest.setIsRead(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_IS_READ))));
-                res.add(latest);
+                NewsInfo newsInfo = new NewsInfo();
+                newsInfo.sid = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SID));
+                newsInfo.title = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TITLE));
+                newsInfo.pubtime = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_PUBTIME));
+                newsInfo.summary = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SUMMARY));
+                newsInfo.topic = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TOPIC));
+                newsInfo.counter = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_COUNTER));
+                newsInfo.comments = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_COMMENTS));
+                newsInfo.ratings = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_RATINGS));
+                newsInfo.score = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SCORE));
+                newsInfo.ratings_story = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_RATINGS_STORY));
+                newsInfo.score_story = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SCORE_STORY));
+                newsInfo.topic_logo = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TOPIC_LOGO));
+                newsInfo.thumb = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_THUMB));
+                newsInfo.setIsRead(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_IS_READ))));
+                res.add(newsInfo);
                 i++;
             }
             cursor.close();
@@ -81,37 +87,87 @@ public class DBHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public int saveList(ArrayList<Latest> data) {
-        int count = 0;
-
-        return count;
+    public void saveNewsInfoList(final ArrayList<NewsInfo> data, Runnable onSaveFinish) {
+        AsyncManager.postTask(new Runnable() {
+            @Override
+            public void run() {
+                for (NewsInfo newsInfo : data) {
+                    if (queryNewsInfo(newsInfo)) {
+                        updateNewsInfo(newsInfo, null);
+                    } else {
+                        insertNewsInfo(newsInfo);
+                    }
+                }
+            }
+        }, onSaveFinish);
     }
 
-    private void insertList(Latest latest) {
-        mResolver.insert(Uri.parse(DBProvider.URI_LIST), getListContentValues(latest));
-    }
-
-    private void updateList(Latest latest) {
-    }
-
-    private ContentValues getListContentValues(Latest latest) {
+    public void updateNewsInfoIsRead(NewsInfo newsInfo) {
         ContentValues values = new ContentValues();
-        values.put(DBConstant.TableList.COLUMN_SID, latest.sid);
-        values.put(DBConstant.TableList.COLUMN_TITLE, latest.title);
-        values.put(DBConstant.TableList.COLUMN_PUBTIME, latest.pubtime);
-        values.put(DBConstant.TableList.COLUMN_SUMMARY, latest.summary);
-        values.put(DBConstant.TableList.COLUMN_TOPIC, latest.topic);
-        values.put(DBConstant.TableList.COLUMN_COUNTER, latest.counter);
-        values.put(DBConstant.TableList.COLUMN_COMMENTS, latest.comments);
-        values.put(DBConstant.TableList.COLUMN_RATINGS, latest.ratings);
-        values.put(DBConstant.TableList.COLUMN_SCORE, latest.score);
-        values.put(DBConstant.TableList.COLUMN_RATINGS_STORY, latest.ratings_story);
-        values.put(DBConstant.TableList.COLUMN_SCORE_STORY, latest.score_story);
-        values.put(DBConstant.TableList.COLUMN_TOPIC_LOGO, latest.topic_logo);
-        values.put(DBConstant.TableList.COLUMN_THUMB, latest.thumb);
-        values.put(DBConstant.TableList.COLUMN_IS_READ, latest.isRead());
-        values.put(DBConstant.TableList.COLUMN_IS_COLLECTED, false);
+        values.put(DBConstant.TableList.COLUMN_IS_READ, true + "");
+        updateNewsInfo(newsInfo, values);
+    }
+
+    public void updateNewsInfoIsCollected(NewsInfo newsInfo, boolean isCollected) {
+        ContentValues values = new ContentValues();
+        values.put(DBConstant.TableList.COLUMN_IS_COLLECTED, isCollected + "");
+        updateNewsInfo(newsInfo, values);
+    }
+
+    private boolean queryNewsInfo(NewsInfo newsInfo) {
+        boolean res = false;
+        Cursor cursor = mResolver.query(Uri.parse(DBProvider.URI_LIST), null,
+                DBConstant.TableList.COLUMN_SID + "=?", new String[]{newsInfo.sid}, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                res = true;
+            }
+            cursor.close();
+        }
+        return res;
+    }
+
+    private void insertNewsInfo(NewsInfo newsInfo) {
+        mResolver.insert(Uri.parse(DBProvider.URI_LIST), getContentValuesNewsInfo(newsInfo, false));
+    }
+
+    private void updateNewsInfo(NewsInfo newsInfo, ContentValues updateValues) {
+        ContentValues values = getContentValuesNewsInfo(newsInfo, true);
+        if (updateValues != null)
+            values.putAll(updateValues);
+        mResolver.update(Uri.parse(DBProvider.URI_LIST), values,
+                DBConstant.TableList.COLUMN_SID + "=?", new String[]{newsInfo.sid});
+    }
+
+    private ContentValues getContentValuesNewsInfo(NewsInfo newsInfo, boolean isUpdate) {
+        ContentValues values = new ContentValues();
+        values.put(DBConstant.TableList.COLUMN_SID, newsInfo.sid);
+        values.put(DBConstant.TableList.COLUMN_TITLE, newsInfo.title);
+        values.put(DBConstant.TableList.COLUMN_PUBTIME, newsInfo.pubtime);
+        values.put(DBConstant.TableList.COLUMN_SUMMARY, newsInfo.summary);
+        values.put(DBConstant.TableList.COLUMN_TOPIC, newsInfo.topic);
+        values.put(DBConstant.TableList.COLUMN_COUNTER, newsInfo.counter);
+        values.put(DBConstant.TableList.COLUMN_COMMENTS, newsInfo.comments);
+        values.put(DBConstant.TableList.COLUMN_RATINGS, newsInfo.ratings);
+        values.put(DBConstant.TableList.COLUMN_SCORE, newsInfo.score);
+        values.put(DBConstant.TableList.COLUMN_RATINGS_STORY, newsInfo.ratings_story);
+        values.put(DBConstant.TableList.COLUMN_SCORE_STORY, newsInfo.score_story);
+        values.put(DBConstant.TableList.COLUMN_TOPIC_LOGO, newsInfo.topic_logo);
+        values.put(DBConstant.TableList.COLUMN_THUMB, newsInfo.thumb);
+        values.put(DBConstant.TableList.COLUMN_IS_READ, false + "");
+        values.put(DBConstant.TableList.COLUMN_IS_COLLECTED, false + "");
         values.put(DBConstant.UNIVERSAL_COLUMN_DB_UPDATE_TIME, System.currentTimeMillis());
+        if (isUpdate) {
+            values.remove(DBConstant.TableList.COLUMN_SID);
+            values.remove(DBConstant.TableList.COLUMN_TITLE);
+            values.remove(DBConstant.TableList.COLUMN_PUBTIME);
+            values.remove(DBConstant.TableList.COLUMN_SUMMARY);
+            values.remove(DBConstant.TableList.COLUMN_TOPIC);
+            values.remove(DBConstant.TableList.COLUMN_TOPIC_LOGO);
+            values.remove(DBConstant.TableList.COLUMN_THUMB);
+            values.remove(DBConstant.TableList.COLUMN_IS_READ);
+            values.remove(DBConstant.TableList.COLUMN_IS_COLLECTED);
+        }
         return values;
     }
 
