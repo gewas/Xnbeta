@@ -5,4 +5,6 @@ package com.icer.cnbeta.app;
  */
 public class AppConfig {
     public static final boolean IS_DEBUG_MODE = true;
+
+    public static final int VERSION_DB = 1;
 }

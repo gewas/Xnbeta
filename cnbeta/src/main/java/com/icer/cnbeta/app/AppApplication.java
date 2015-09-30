@@ -1,6 +1,7 @@
 package com.icer.cnbeta.app;
 
 import android.app.Application;
+import android.content.ContentResolver;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -12,12 +13,14 @@ public class AppApplication extends Application {
 
     private static AppApplication appApplication;
     private RequestQueue appRequestQueue;
+    private ContentResolver appContentResolver;
 
     @Override
     public void onCreate() {
         super.onCreate();
         initSingleton();
         initRequestQueue();
+        initContentResolver();
     }
 
     private void initSingleton() {
@@ -32,9 +35,15 @@ public class AppApplication extends Application {
         appRequestQueue = Volley.newRequestQueue(getApplicationContext());
     }
 
+    private void initContentResolver() {
+        appContentResolver = getContentResolver();
+    }
+
     public RequestQueue getAppRequestQueue() {
         return appRequestQueue;
     }
 
-
+    public ContentResolver getAppContentResolver() {
+        return appContentResolver;
+    }
 }

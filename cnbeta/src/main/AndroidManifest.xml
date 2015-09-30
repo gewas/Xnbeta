@@ -25,6 +25,12 @@
         <activity
             android:name=".ui.ContentActivity"
             android:screenOrientation="portrait"/>
+
+        <provider
+            android:name=".db.DBProvider"
+            android:authorities="com.icer.cnbeta.provider.db"
+            android:exported="false">
+        </provider>
     </application>
 
 </manifest>
