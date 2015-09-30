@@ -76,8 +76,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 res.add(latest);
                 i++;
             }
+            cursor.close();
         }
-        cursor.close();
         return res;
     }
 
