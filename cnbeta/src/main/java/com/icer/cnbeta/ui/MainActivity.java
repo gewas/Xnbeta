@@ -73,7 +73,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
     private void initView() {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setProgressViewOffset(false, -dp2pxInt(48), dp2pxInt(64));
+        mSwipeRefreshLayout.setProgressViewOffset(false, -dp2pxInt(48), dp2pxInt(48));
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.color_lowest_bg));
         mListView = (ListView) findViewById(R.id.list);
     }
