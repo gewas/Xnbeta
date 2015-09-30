@@ -93,12 +93,14 @@ public class LatestListAdapter extends BaseAdapter {
     }
 
     public void onItemClick(int position) {
+        mData.get(position).setIsRead(true);
         Intent intent = new Intent(mContext, ContentActivity.class);
         intent.putExtra(AppConstants.SID, mData.get(position).sid);
         intent.putExtra(AppConstants.TITLE, mData.get(position).title);
         intent.putExtra(AppConstants.PUBTIME, mData.get(position).pubtime);
         mContext.startActivity(intent);
         ((BaseActivity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        notifyDataSetChanged();
     }
 
     public String getLastSid() {
@@ -113,12 +115,14 @@ public class LatestListAdapter extends BaseAdapter {
         private TextView info;
         private TextView title;
         private TextView summary;
+        private ImageView isNew;
 
         private void initView(View view) {
             thumb = (ImageView) view.findViewById(R.id.item_thumb_iv);
             info = (TextView) view.findViewById(R.id.item_info_tv);
             title = (TextView) view.findViewById(R.id.item_title_tv);
             summary = (TextView) view.findViewById(R.id.item_summary_tv);
+            isNew = (ImageView) view.findViewById(R.id.item_new_iv);
         }
 
         private void fillInData(Latest bean) {
@@ -127,6 +131,7 @@ public class LatestListAdapter extends BaseAdapter {
             TextViewUtil.setSubColorText(mContext, info, null, R.color.color_333333, bean.comments, bean.score, bean.score_story);
             title.setText(bean.title);
             summary.setText(bean.summary);
+            isNew.setVisibility(bean.isRead() ? View.INVISIBLE : View.VISIBLE);
         }
 
         private void loadImage(final Latest bean) {

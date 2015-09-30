@@ -18,6 +18,16 @@ public class Latest {
     public String topic_logo;
     public String thumb;
 
+    private boolean isRead;
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setIsRead(boolean isRead) {
+        this.isRead = isRead;
+    }
+
     @Override
     public String toString() {
         return "Latest{" +

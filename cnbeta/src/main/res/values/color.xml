@@ -2,6 +2,7 @@
 <resources>
     <color name="color_lowest_bg">#669acc</color>
     <color name="color_white">#ffffff</color>
+    <color name="color_ccff5555">#ccff5555</color>
     <color name="color_eeeeee">#eeeeee</color>
     <color name="color_f0f0f0">#f0f0f0</color>
     <color name="color_black">#000000</color>
