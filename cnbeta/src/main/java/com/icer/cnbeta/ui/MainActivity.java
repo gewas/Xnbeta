@@ -15,6 +15,7 @@ import com.icer.cnbeta.R;
 import com.icer.cnbeta.adapter.LatestListAdapter;
 import com.icer.cnbeta.app.AppConstants;
 import com.icer.cnbeta.app.BaseActivity;
+import com.icer.cnbeta.db.DBHelper;
 import com.icer.cnbeta.manager.RequestManager;
 import com.icer.cnbeta.volley.LatestListBean;
 import com.icer.cnbeta.volley.entity.Latest;
@@ -34,6 +35,9 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     private ListView mListView;
 
     private LatestListAdapter mAdapter;
+    private ArrayList<Latest> mData;
+
+    private DBHelper mDBHelper;
 
     private boolean mIsRequesting;
 
@@ -46,7 +50,8 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         initAdapter();
         initActionBar();
         regListener();
-        requestList(null);
+        loadDataFromDB();
+        requestListFromNet(null);
     }
 
     @Override
@@ -68,7 +73,8 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     }
 
     private void initData() {
-
+        mDBHelper = new DBHelper(this);
+        mData = new ArrayList<>();
     }
 
     private void initView() {
@@ -79,7 +85,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     }
 
     private void initAdapter() {
-        mAdapter = new LatestListAdapter(this, new ArrayList<Latest>());
+        mAdapter = new LatestListAdapter(this, mData);
         mListView.setAdapter(mAdapter);
     }
 
@@ -94,7 +100,11 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         mToolbar.setTitle(R.string.subtitle_latest);
     }
 
-    private void requestList(final String lastSid) {
+    private void loadDataFromDB() {
+        mDBHelper.getList();
+    }
+
+    private void requestListFromNet(final String lastSid) {
         if (!mIsRequesting) {
             if (lastSid == null && !mSwipeRefreshLayout.isRefreshing())
                 startRefresh();
@@ -139,7 +149,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     @Override
     public void onRefresh() {
         if (!mIsRequesting)
-            requestList(null);
+            requestListFromNet(null);
         else
             stopRefresh();
     }
@@ -158,7 +168,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (!mIsRequesting && mAdapter.getLastSid() != null && totalItemCount - visibleItemCount <= firstVisibleItem) {
             showToast(getString(R.string.hint_loading_more));
-            requestList(mAdapter.getLastSid());
+            requestListFromNet(mAdapter.getLastSid());
         }
     }
 }

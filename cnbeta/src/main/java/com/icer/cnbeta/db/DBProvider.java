@@ -17,10 +17,13 @@ public class DBProvider extends ContentProvider {
 
     public static final String AUTHORITIES = "com.icer.cnbeta.provider.db";
 
+    public static final String URI_LIST = "content://" + AUTHORITIES + "/" + DBConstant.TableList.TABLE_NAME;
+    public static final String URI_CONTENT = "content://" + AUTHORITIES + "/" + DBConstant.TableContent.TABLE_NAME;
+
     private final int Match_CODE_LIST = 1;
     private final int Match_CODE_CONTENT = 2;
 
-    private SQLiteDatabase mSQLiteDatabase;
+    private DBHelper mDBHelper;
     private UriMatcher mUriMatcher;
 
     @Override
@@ -33,16 +36,17 @@ public class DBProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        if (mSQLiteDatabase == null)
-            mSQLiteDatabase = new DBHelper(AppApplication.getInstance().getApplicationContext()).getWritableDatabase();
+        if (mDBHelper == null)
+            mDBHelper = new DBHelper(AppApplication.getInstance());
+        SQLiteDatabase tSQLiteDatabase = mDBHelper.getReadableDatabase();
         Cursor cursor = null;
         switch (mUriMatcher.match(uri)) {
             case Match_CODE_LIST:
-                cursor = mSQLiteDatabase.query(DBConstant.TableList.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = tSQLiteDatabase.query(DBConstant.TableList.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
             case Match_CODE_CONTENT:
-                cursor = mSQLiteDatabase.query(DBConstant.TableContent.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor = tSQLiteDatabase.query(DBConstant.TableContent.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
         }
         return cursor;
@@ -65,15 +69,16 @@ public class DBProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        if (mSQLiteDatabase == null)
-            mSQLiteDatabase = new DBHelper(AppApplication.getInstance().getApplicationContext()).getWritableDatabase();
+        if (mDBHelper == null)
+            mDBHelper = new DBHelper(AppApplication.getInstance());
+        SQLiteDatabase tSQLiteDatabase = mDBHelper.getReadableDatabase();
         switch (mUriMatcher.match(uri)) {
             case Match_CODE_LIST:
-                mSQLiteDatabase.insert(DBConstant.TableList.TABLE_NAME, null, values);
+                tSQLiteDatabase.insert(DBConstant.TableList.TABLE_NAME, null, values);
                 break;
 
             case Match_CODE_CONTENT:
-                mSQLiteDatabase.insert(DBConstant.TableContent.TABLE_NAME, null, values);
+                tSQLiteDatabase.insert(DBConstant.TableContent.TABLE_NAME, null, values);
                 break;
         }
         return uri;
@@ -81,16 +86,17 @@ public class DBProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        if (mSQLiteDatabase == null)
-            mSQLiteDatabase = new DBHelper(AppApplication.getInstance().getApplicationContext()).getWritableDatabase();
+        if (mDBHelper == null)
+            mDBHelper = new DBHelper(AppApplication.getInstance());
+        SQLiteDatabase tSQLiteDatabase = mDBHelper.getReadableDatabase();
         int count = 0;
         switch (mUriMatcher.match(uri)) {
             case Match_CODE_LIST:
-                count = mSQLiteDatabase.delete(DBConstant.TableList.TABLE_NAME, selection, selectionArgs);
+                count = tSQLiteDatabase.delete(DBConstant.TableList.TABLE_NAME, selection, selectionArgs);
                 break;
 
             case Match_CODE_CONTENT:
-                count = mSQLiteDatabase.delete(DBConstant.TableContent.TABLE_NAME, selection, selectionArgs);
+                count = tSQLiteDatabase.delete(DBConstant.TableContent.TABLE_NAME, selection, selectionArgs);
                 break;
         }
         return count;
@@ -98,16 +104,17 @@ public class DBProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        if (mSQLiteDatabase == null)
-            mSQLiteDatabase = new DBHelper(AppApplication.getInstance().getApplicationContext()).getWritableDatabase();
+        if (mDBHelper == null)
+            mDBHelper = new DBHelper(AppApplication.getInstance());
+        SQLiteDatabase tSQLiteDatabase = mDBHelper.getReadableDatabase();
         int count = 0;
         switch (mUriMatcher.match(uri)) {
             case Match_CODE_LIST:
-                count = mSQLiteDatabase.update(DBConstant.TableList.TABLE_NAME, values, selection, selectionArgs);
+                count = tSQLiteDatabase.update(DBConstant.TableList.TABLE_NAME, values, selection, selectionArgs);
                 break;
 
             case Match_CODE_CONTENT:
-                count = mSQLiteDatabase.update(DBConstant.TableContent.TABLE_NAME, values, selection, selectionArgs);
+                count = tSQLiteDatabase.update(DBConstant.TableContent.TABLE_NAME, values, selection, selectionArgs);
                 break;
         }
         return count;
