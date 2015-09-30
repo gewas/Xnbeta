@@ -20,7 +20,7 @@ import com.icer.cnbeta.manager.FileManager;
 import com.icer.cnbeta.manager.RequestManager;
 import com.icer.cnbeta.ui.ContentActivity;
 import com.icer.cnbeta.util.TextViewUtil;
-import com.icer.cnbeta.volley.entity.Latest;
+import com.icer.cnbeta.volley.entity.NewsInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,9 +31,9 @@ public class LatestListAdapter extends BaseAdapter {
     public static final int ID = TAG.hashCode();
 
     private Context mContext;
-    private ArrayList<Latest> mData;
+    private ArrayList<NewsInfo> mData;
 
-    public LatestListAdapter(Context context, ArrayList<Latest> data) {
+    public LatestListAdapter(Context context, ArrayList<NewsInfo> data) {
         mContext = context;
         mData = data;
     }
@@ -68,7 +68,7 @@ public class LatestListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public boolean refreshData(ArrayList<Latest> list) {
+    public boolean refreshData(ArrayList<NewsInfo> list) {
         boolean res = false;
         if (mData.size() == 0) {
             addData(list);
@@ -87,7 +87,7 @@ public class LatestListAdapter extends BaseAdapter {
         return res;
     }
 
-    public void addData(ArrayList<Latest> list) {
+    public void addData(ArrayList<NewsInfo> list) {
         mData.addAll(list);
         notifyDataSetChanged();
     }
@@ -125,7 +125,7 @@ public class LatestListAdapter extends BaseAdapter {
             isNew = (ImageView) view.findViewById(R.id.item_new_iv);
         }
 
-        private void fillInData(Latest bean) {
+        private void fillInData(NewsInfo bean) {
             loadImage(bean);
             info.setText(R.string.item_info);//reset to initial state is important
             TextViewUtil.setSubColorText(mContext, info, null, R.color.color_333333, bean.comments, bean.score, bean.score_story);
@@ -134,7 +134,7 @@ public class LatestListAdapter extends BaseAdapter {
             isNew.setVisibility(bean.isRead() ? View.INVISIBLE : View.VISIBLE);
         }
 
-        private void loadImage(final Latest bean) {
+        private void loadImage(final NewsInfo bean) {
             thumb.setImageResource(R.drawable.ic_launcher);
             File file = FileManager.getInstance().findFileWithinInternalStorage(mContext, bean.thumb.hashCode() + "");
             if (file != null) {

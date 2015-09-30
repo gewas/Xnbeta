@@ -3,7 +3,7 @@ package com.icer.cnbeta.volley.entity;
 /**
  * Created by icer on 2015-09-25.
  */
-public class Latest {
+public class NewsInfo {
     public String sid;
     public String title;
     public String pubtime;
@@ -30,7 +30,7 @@ public class Latest {
 
     @Override
     public String toString() {
-        return "Latest{" +
+        return "NewsInfo{" +
                 "sid='" + sid + '\'' +
                 ", title='" + title + '\'' +
                 ", pubtime='" + pubtime + '\'' +

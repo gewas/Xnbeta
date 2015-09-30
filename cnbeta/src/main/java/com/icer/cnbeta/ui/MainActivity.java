@@ -17,8 +17,8 @@ import com.icer.cnbeta.app.AppConstants;
 import com.icer.cnbeta.app.BaseActivity;
 import com.icer.cnbeta.db.DBHelper;
 import com.icer.cnbeta.manager.RequestManager;
-import com.icer.cnbeta.volley.LatestListBean;
-import com.icer.cnbeta.volley.entity.Latest;
+import com.icer.cnbeta.volley.NewsInfoListBean;
+import com.icer.cnbeta.volley.entity.NewsInfo;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     private ListView mListView;
 
     private LatestListAdapter mAdapter;
-    private ArrayList<Latest> mData;
+    private ArrayList<NewsInfo> mData;
 
     private DBHelper mDBHelper;
 
@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     }
 
     private void loadDataFromDB() {
-        mDBHelper.getList();
+        mDBHelper.getLatest20List();
     }
 
     private void requestListFromNet(final String lastSid) {
@@ -113,15 +113,15 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 @Override
                 public void onResponse(String s) {
                     logI(TAG, s);
-                    LatestListBean latestListBean = JSON.parseObject(s, LatestListBean.class);
-                    logI(TAG, latestListBean.toString());
+                    NewsInfoListBean newsInfoListBean = JSON.parseObject(s, NewsInfoListBean.class);
+                    logI(TAG, newsInfoListBean.toString());
                     if (lastSid == null) {
-                        if (!mAdapter.refreshData(latestListBean.result))
+                        if (!mAdapter.refreshData(newsInfoListBean.result))
                             showToastLong(getString(R.string.hint_already_latest));
                         stopRefresh();
                     } else {
                         showToast(getString(R.string.hint_loading_more_complete));
-                        mAdapter.addData(latestListBean.result);
+                        mAdapter.addData(newsInfoListBean.result);
                     }
                     mIsRequesting = false;
                 }

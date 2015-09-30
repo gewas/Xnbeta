@@ -19,7 +19,7 @@ import com.icer.cnbeta.app.AppConstants;
 import com.icer.cnbeta.app.BaseActivity;
 import com.icer.cnbeta.manager.RequestManager;
 import com.icer.cnbeta.util.TextViewUtil;
-import com.icer.cnbeta.volley.ContentBean;
+import com.icer.cnbeta.volley.NewsContentBean;
 
 /**
  * Created by icer on 2015-09-28.
@@ -105,12 +105,12 @@ public class ContentActivity extends BaseActivity {
             @Override
             public void onResponse(String s) {
                 logI(TAG, s);
-                ContentBean contentBean = JSON.parseObject(s, ContentBean.class);
-                logI(TAG, contentBean.toString());
-                TextViewUtil.setTextAfterColon(ContentActivity.this, mSourceTv, contentBean.result.source, true);
+                NewsContentBean newsContentBean = JSON.parseObject(s, NewsContentBean.class);
+                logI(TAG, newsContentBean.toString());
+                TextViewUtil.setTextAfterColon(ContentActivity.this, mSourceTv, newsContentBean.result.source, true);
                 mDividerV.setVisibility(View.VISIBLE);
-                updateSummary(contentBean.result.hometext);
-                addWebView2ContentLayout(contentBean.result.bodytext);
+                updateSummary(newsContentBean.result.hometext);
+                addWebView2ContentLayout(newsContentBean.result.bodytext);
             }
         }, new Response.ErrorListener() {
             @Override

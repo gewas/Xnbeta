@@ -3,7 +3,7 @@ package com.icer.cnbeta.volley.entity;
 /**
  * Created by icer on 2015-09-28.
  */
-public class Content {
+public class NewsContent {
     public String sid;
     public String catid;
     public String topic;
@@ -33,7 +33,7 @@ public class Content {
 
     @Override
     public String toString() {
-        return "Content{" +
+        return "NewsContent{" +
                 "sid='" + sid + '\'' +
                 ", catid='" + catid + '\'' +
                 ", topic='" + topic + '\'' +
@@ -60,6 +60,6 @@ public class Content {
                 ", data_id='" + data_id + '\'' +
                 ", bodytext='" + bodytext + '\'' +
                 ", time='" + time + '\'' +
-                '}' + super.toString();
+                '}';
     }
 }
