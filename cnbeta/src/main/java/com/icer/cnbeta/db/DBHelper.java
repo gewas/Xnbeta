@@ -54,32 +54,30 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<Latest> res = null;
         Cursor cursor = mResolver.query(Uri.parse(DBProvider.URI_LIST), null, null, null, DBConstant.TableList.COLUMN_SID + " DESC");
         if (cursor != null) {
-            cursor.moveToNext();//////////////////////////
-            if (!cursor.isLast()) {
-                res = new ArrayList<>();
-                for (int i = 0; !cursor.isLast(); cursor.moveToNext()) {
-                    if (i == 20)
-                        break;
-                    Latest latest = new Latest();
-                    latest.sid = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SID));
-                    latest.title = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TITLE));
-                    latest.pubtime = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_PUBTIME));
-                    latest.summary = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SUMMARY));
-                    latest.topic = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TOPIC));
-                    latest.counter = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_COUNTER));
-                    latest.comments = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_COMMENTS));
-                    latest.ratings = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_RATINGS));
-                    latest.score = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SCORE));
-                    latest.ratings_story = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_RATINGS_STORY));
-                    latest.score_story = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SCORE_STORY));
-                    latest.topic_logo = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TOPIC_LOGO));
-                    latest.thumb = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_THUMB));
-                    latest.setIsRead(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_IS_READ))));
-                    res.add(latest);
-                }
+            int i = 0;
+            while (cursor.moveToNext()) {
+                if (res == null) res = new ArrayList<>();
+                if (i == 20) break;
+                Latest latest = new Latest();
+                latest.sid = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SID));
+                latest.title = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TITLE));
+                latest.pubtime = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_PUBTIME));
+                latest.summary = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SUMMARY));
+                latest.topic = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TOPIC));
+                latest.counter = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_COUNTER));
+                latest.comments = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_COMMENTS));
+                latest.ratings = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_RATINGS));
+                latest.score = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SCORE));
+                latest.ratings_story = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_RATINGS_STORY));
+                latest.score_story = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SCORE_STORY));
+                latest.topic_logo = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TOPIC_LOGO));
+                latest.thumb = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_THUMB));
+                latest.setIsRead(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_IS_READ))));
+                res.add(latest);
+                i++;
             }
-            cursor.close();
         }
+        cursor.close();
         return res;
     }
 
