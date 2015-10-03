@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     }
 
     private void loadDataFromDB() {
-        mAdapter.addData(mDBHelper.getLocalNewsInfoList(null));
+        mAdapter.addData(mDBHelper.getLocalNewsInfoList(false, null));
         if (mAdapter.getCount() == 0)
             requestListFromNet(null);
     }
@@ -148,7 +148,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                         mDBHelper.saveNewsInfoList(newsInfoListBean.result, new Runnable() {
                             @Override
                             public void run() {
-                                mAdapter.addData(mDBHelper.getLocalNewsInfoList(lastSid));
+                                mAdapter.addData(mDBHelper.getLocalNewsInfoList(false, lastSid));
                                 showToast(getString(R.string.hint_loading_more_complete));
                                 mIsRequesting = false;
                             }

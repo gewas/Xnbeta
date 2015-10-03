@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
 import com.icer.cnbeta.app.AppConfig;
+import com.icer.cnbeta.manager.AsyncManager;
 import com.icer.cnbeta.volley.entity.NewsInfo;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public ArrayList<NewsInfo> getLocalNewsInfoList(String lastSid) {
+    public ArrayList<NewsInfo> getLocalNewsInfoList(boolean isCollected, String lastSid) {
         ArrayList<NewsInfo> res = null;
         String selection = null;
         String[] selectionArgs = null;
@@ -58,28 +59,17 @@ public class DBHelper extends SQLiteOpenHelper {
             selection = DBConstant.TableList.COLUMN_SID + "<?";
             selectionArgs = new String[]{lastSid};
         }
+        if (isCollected) {
+            selection = DBConstant.TableList.COLUMN_IS_COLLECTED + "=?";
+            selectionArgs = new String[]{true + ""};
+        }
         Cursor cursor = mResolver.query(Uri.parse(DBProvider.URI_LIST), null, selection, selectionArgs, DBConstant.TableList.COLUMN_SID + " DESC");
         if (cursor != null) {
             int i = 0;
             while (cursor.moveToNext()) {
                 if (res == null) res = new ArrayList<>();
                 if (i == 20) break;
-                NewsInfo newsInfo = new NewsInfo();
-                newsInfo.sid = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SID));
-                newsInfo.title = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TITLE));
-                newsInfo.pubtime = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_PUBTIME));
-                newsInfo.summary = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SUMMARY));
-                newsInfo.topic = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TOPIC));
-                newsInfo.counter = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_COUNTER));
-                newsInfo.comments = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_COMMENTS));
-                newsInfo.ratings = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_RATINGS));
-                newsInfo.score = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SCORE));
-                newsInfo.ratings_story = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_RATINGS_STORY));
-                newsInfo.score_story = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_SCORE_STORY));
-                newsInfo.topic_logo = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_TOPIC_LOGO));
-                newsInfo.thumb = cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_THUMB));
-                newsInfo.setIsRead(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_IS_READ))));
-                res.add(newsInfo);
+                res.add(new NewsInfo(cursor));
                 i++;
             }
             cursor.close();
@@ -105,12 +95,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void updateNewsInfoIsRead(NewsInfo newsInfo) {
         ContentValues values = new ContentValues();
         values.put(DBConstant.TableList.COLUMN_IS_READ, true + "");
-        updateNewsInfo(newsInfo, values);
-    }
-
-    public void updateNewsInfoIsCollected(NewsInfo newsInfo, boolean isCollected) {
-        ContentValues values = new ContentValues();
-        values.put(DBConstant.TableList.COLUMN_IS_COLLECTED, isCollected + "");
         updateNewsInfo(newsInfo, values);
     }
 

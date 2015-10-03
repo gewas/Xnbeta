@@ -1,4 +1,4 @@
-package com.icer.cnbeta.db;
+package com.icer.cnbeta.manager;
 
 import android.os.AsyncTask;
 
