@@ -8,6 +8,8 @@
     <!-- subtitle -->
     <string name="subtitle_latest">最新资讯</string>
     <string name="subtitle_content">资讯详情</string>
+    <string name="subtitle_collections">我的收藏</string>
+    <string name="subtitle_comments">资讯评论</string>
 
     <!-- list item factors -->
     <string name="item_info">评论：%1$s 条&#160;&#160;&#160;&#160;事件分：%2$s 分&#160;&#160;&#160;&#160;质量分：%3$s 分</string>
@@ -16,8 +18,14 @@
     <string name="content_source">稿源：</string>
 
     <!-- hint -->
+    <string name="hint_double_click_finish">再次点击退出</string>
     <string name="hint_already_latest">小编罢工了啦（╯‵□′）╯︵┴─┴</string>
     <string name="hint_loading_more">加载更多(๑و•̀ω•́)و</string>
     <string name="hint_loading_more_complete">加载完成(๑´ڡ`๑)</string>
 
+
+    <!-- action -->
+    <string name="action_collections">我的收藏</string>
+    <string name="action_collect">收藏</string>
+    <string name="action_comments">查看评论</string>
 </resources>

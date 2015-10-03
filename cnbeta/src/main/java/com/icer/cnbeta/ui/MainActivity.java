@@ -1,8 +1,11 @@
 package com.icer.cnbeta.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -69,6 +72,22 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     protected void onRestart() {
         super.onRestart();
         mIsRequesting = false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_collections:
+                goToActivity(new Intent(MainActivity.this, CollectionActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initData() {

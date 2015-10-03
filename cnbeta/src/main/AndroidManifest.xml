@@ -26,6 +26,14 @@
             android:name=".ui.ContentActivity"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".ui.CollectionActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.CommentActivity"
+            android:screenOrientation="portrait"/>
+
         <provider
             android:name=".db.DBProvider"
             android:authorities="com.icer.cnbeta.provider.db"

@@ -1,16 +1,19 @@
 package com.icer.cnbeta.app;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.icer.cnbeta.R;
+import com.icer.cnbeta.ui.MainActivity;
 
 /**
  * Created by icer on 2015-09-24.
@@ -22,6 +25,7 @@ public class BaseActivity extends AppCompatActivity {
     private boolean mIsToolBarInit;
     private boolean mIsBackground = true;
     private boolean mIsDestroyed;
+    private long mLastClickNavigationMillis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,20 @@ public class BaseActivity extends AppCompatActivity {
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
             mToolbar.setNavigationIcon(R.drawable.ic_launcher);
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    long nowMillis = System.currentTimeMillis();
+                    if (BaseActivity.this instanceof MainActivity) {
+                        if (nowMillis - mLastClickNavigationMillis > 2000) {
+                            mLastClickNavigationMillis = nowMillis;
+                            showToast(R.string.hint_double_click_finish);
+                        } else
+                            finish();
+                    } else
+                        finishActivity();
+                }
+            });
             mToolbar.setTitleTextColor(getResources().getColor(R.color.color_white));
             mToolbar.setSubtitleTextColor(getResources().getColor(R.color.color_white));
             mToolbar.setOverflowIcon(getResources().getDrawable(android.R.drawable.ic_menu_more));
@@ -74,6 +92,18 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean isDestroyed() {
         return mIsDestroyed;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (BaseActivity.this instanceof MainActivity)
+                finish();
+            else
+                finishActivity();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void translucentSystemBar() {
@@ -110,11 +140,19 @@ public class BaseActivity extends AppCompatActivity {
             Log.e(tag, log);
     }
 
+    public void showToast(int stringId) {
+        showToast(getString(stringId));
+    }
+
     public void showToast(String text) {
         if (mToast != null)
             mToast.cancel();
         mToast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
         mToast.show();
+    }
+
+    public void showToastLong(int stringId) {
+        showToastLong(getString(stringId));
     }
 
     public void showToastLong(String text) {
@@ -130,5 +168,15 @@ public class BaseActivity extends AppCompatActivity {
 
     public int dp2pxInt(float dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    }
+
+    public void goToActivity(Intent intent) {
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    public void finishActivity() {
+        finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

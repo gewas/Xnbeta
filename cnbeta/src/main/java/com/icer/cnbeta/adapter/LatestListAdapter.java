@@ -108,8 +108,7 @@ public class LatestListAdapter extends BaseAdapter {
         intent.putExtra(AppConstants.SID, newsInfo.sid);
         intent.putExtra(AppConstants.TITLE, newsInfo.title);
         intent.putExtra(AppConstants.PUBTIME, newsInfo.pubtime);
-        mContext.startActivity(intent);
-        ((BaseActivity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        ((BaseActivity) mContext).goToActivity(intent);
         notifyDataSetChanged();
     }
 
