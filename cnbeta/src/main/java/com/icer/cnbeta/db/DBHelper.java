@@ -10,6 +10,7 @@ import android.net.Uri;
 
 import com.icer.cnbeta.app.AppConfig;
 import com.icer.cnbeta.manager.AsyncManager;
+import com.icer.cnbeta.volley.entity.NewsContent;
 import com.icer.cnbeta.volley.entity.NewsInfo;
 
 import java.util.ArrayList;
@@ -152,6 +153,90 @@ public class DBHelper extends SQLiteOpenHelper {
             values.remove(DBConstant.TableList.COLUMN_IS_READ);
             values.remove(DBConstant.TableList.COLUMN_IS_COLLECTED);
         }
+        return values;
+    }
+
+    public void updateNewsIsCollected(String sid, boolean bool) {
+        ContentValues values = new ContentValues();
+        values.put(DBConstant.TableList.COLUMN_IS_COLLECTED, bool + "");
+        mResolver.update(Uri.parse(DBProvider.URI_LIST), values, DBConstant.TableList.COLUMN_SID + "=?", new String[]{sid});
+    }
+
+    public boolean isNewsCollected(String sid) {
+        boolean res = false;
+        Cursor cursor = mResolver.query(Uri.parse(DBProvider.URI_LIST), null,
+                DBConstant.TableList.COLUMN_SID + "=?", new String[]{sid}, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                res = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(DBConstant.TableList.COLUMN_IS_COLLECTED)));
+            }
+            cursor.close();
+        }
+        return res;
+    }
+
+    public void saveNewsContent(NewsContent newsContent) {
+        if (!queryNewsContent(newsContent.sid))
+            insertNewsContent(newsContent);
+    }
+
+    public NewsContent getLocalNewsContent(String sid) {
+        NewsContent newsContent = null;
+        Cursor cursor = mResolver.query(Uri.parse(DBProvider.URI_CONTENT), null, DBConstant.TableContent.COLUMN_SID + "=?", new String[]{sid}, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                newsContent = new NewsContent(cursor);
+            }
+            cursor.close();
+        }
+        return newsContent;
+    }
+
+    private boolean queryNewsContent(String sid) {
+        boolean res = false;
+        Cursor cursor = mResolver.query(Uri.parse(DBProvider.URI_CONTENT), null, DBConstant.TableContent.COLUMN_SID + "=?", new String[]{sid}, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                res = true;
+            }
+            cursor.close();
+        }
+        return res;
+    }
+
+    private void insertNewsContent(NewsContent newsContent) {
+        mResolver.insert(Uri.parse(DBProvider.URI_CONTENT), getContentValuesNewsContent(newsContent));
+    }
+
+    private ContentValues getContentValuesNewsContent(NewsContent newsContent) {
+        ContentValues values = new ContentValues();
+        values.put(DBConstant.TableContent.COLUMN_SID, newsContent.sid);
+        values.put(DBConstant.TableContent.COLUMN_CATID, newsContent.catid);
+        values.put(DBConstant.TableContent.COLUMN_TOPIC, newsContent.topic);
+        values.put(DBConstant.TableContent.COLUMN_AID, newsContent.aid);
+        values.put(DBConstant.TableContent.COLUMN_TITLE, newsContent.title);
+        values.put(DBConstant.TableContent.COLUMN_STYLE, newsContent.style);
+        values.put(DBConstant.TableContent.COLUMN_KEYWORDS, newsContent.keywords);
+        values.put(DBConstant.TableContent.COLUMN_HOMETEXT, newsContent.hometext);
+        values.put(DBConstant.TableContent.COLUMN_LISTORDER, newsContent.listorder);
+        values.put(DBConstant.TableContent.COLUMN_COMMENTS, newsContent.comments);
+        values.put(DBConstant.TableContent.COLUMN_COUNTER, newsContent.counter);
+        values.put(DBConstant.TableContent.COLUMN_GOOD, newsContent.good);
+        values.put(DBConstant.TableContent.COLUMN_BAD, newsContent.bad);
+        values.put(DBConstant.TableContent.COLUMN_SCORE, newsContent.score);
+        values.put(DBConstant.TableContent.COLUMN_RATINGS, newsContent.ratings);
+        values.put(DBConstant.TableContent.COLUMN_SCORE_STORY, newsContent.score_story);
+        values.put(DBConstant.TableContent.COLUMN_RATINGS_STORY, newsContent.ratings_story);
+        values.put(DBConstant.TableContent.COLUMN_ELITE, newsContent.elite);
+        values.put(DBConstant.TableContent.COLUMN_STATUS, newsContent.status);
+        values.put(DBConstant.TableContent.COLUMN_INPUTTIME, newsContent.inputtime);
+        values.put(DBConstant.TableContent.COLUMN_UPDATETIME, newsContent.updatetime);
+        values.put(DBConstant.TableContent.COLUMN_THUMB, newsContent.thumb);
+        values.put(DBConstant.TableContent.COLUMN_SOURCE, newsContent.source);
+        values.put(DBConstant.TableContent.COLUMN_DATA_ID, newsContent.data_id);
+        values.put(DBConstant.TableContent.COLUMN_BODYTEXT, newsContent.bodytext);
+        values.put(DBConstant.TableContent.COLUMN_TIME, newsContent.time);
+        values.put(DBConstant.UNIVERSAL_COLUMN_DB_UPDATE_TIME, System.currentTimeMillis());
         return values;
     }
 

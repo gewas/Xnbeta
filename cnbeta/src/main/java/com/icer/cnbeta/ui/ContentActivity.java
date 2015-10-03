@@ -2,6 +2,8 @@ package com.icer.cnbeta.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.internal.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
@@ -18,9 +20,11 @@ import com.android.volley.VolleyError;
 import com.icer.cnbeta.R;
 import com.icer.cnbeta.app.AppConstants;
 import com.icer.cnbeta.app.BaseActivity;
+import com.icer.cnbeta.db.DBHelper;
 import com.icer.cnbeta.manager.RequestManager;
 import com.icer.cnbeta.util.TextViewUtil;
 import com.icer.cnbeta.volley.NewsContentBean;
+import com.icer.cnbeta.volley.entity.NewsContent;
 
 /**
  * Created by icer on 2015-09-28.
@@ -41,6 +45,9 @@ public class ContentActivity extends BaseActivity {
     private String mSid;
     private String mTitle;
     private String mPubtime;
+    private boolean mIsCollected;
+
+    private DBHelper mDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +55,13 @@ public class ContentActivity extends BaseActivity {
         setContentView(R.layout.activity_content);
         initData();
         initView();
-        regListener();
         initActionBar();
-        requestContent();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        LoadContentFromDB();
     }
 
     @Override
@@ -67,7 +73,8 @@ public class ContentActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.content, menu);
-        return super.onCreateOptionsMenu(menu);
+        initCollectState();
+        return true;
     }
 
     @Override
@@ -78,7 +85,7 @@ public class ContentActivity extends BaseActivity {
                 return true;
 
             case R.id.action_collect:
-                item.setIcon(R.drawable.ic_uncollect);//////////////////////////
+                updateCollectState();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -89,6 +96,8 @@ public class ContentActivity extends BaseActivity {
         mSid = intent.getStringExtra(AppConstants.SID);
         mTitle = intent.getStringExtra(AppConstants.TITLE);
         mPubtime = intent.getStringExtra(AppConstants.PUBTIME);
+        mDBHelper = new DBHelper(this);
+        mIsCollected = mDBHelper.isNewsCollected(mSid);
     }
 
     private void initView() {
@@ -102,13 +111,22 @@ public class ContentActivity extends BaseActivity {
         mContentLl = (LinearLayout) findViewById(R.id.content_ll);
     }
 
-    private void regListener() {
-
-    }
-
     private void initActionBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(R.string.subtitle_content);
+    }
+
+    private void LoadContentFromDB() {
+        final NewsContent newsContent = mDBHelper.getLocalNewsContent(mSid);
+        if (newsContent == null)
+            requestContent();
+        else
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    fillContentData(newsContent);
+                }
+            }, 300);
     }
 
     private void requestContent() {
@@ -117,11 +135,8 @@ public class ContentActivity extends BaseActivity {
             public void onResponse(String s) {
                 logI(TAG, s);
                 NewsContentBean newsContentBean = JSON.parseObject(s, NewsContentBean.class);
-                logI(TAG, newsContentBean.toString());
-                TextViewUtil.setTextAfterColon(ContentActivity.this, mSourceTv, newsContentBean.result.source, true);
-                mDividerV.setVisibility(View.VISIBLE);
-                updateSummary(newsContentBean.result.hometext);
-                addWebView2ContentLayout(newsContentBean.result.bodytext);
+                mDBHelper.saveNewsContent(newsContentBean.result);
+                fillContentData(newsContentBean.result);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -129,6 +144,33 @@ public class ContentActivity extends BaseActivity {
                 showToast(AppConstants.HINT_LOADING_FAILED);
             }
         }, TAG);
+    }
+
+    private void fillContentData(NewsContent newsContent) {
+        logI(TAG, newsContent.toString());
+        TextViewUtil.setTextAfterColon(ContentActivity.this, mSourceTv, newsContent.source, true);
+        mDividerV.setVisibility(View.VISIBLE);
+        updateSummary(newsContent.hometext);
+        addWebView2ContentLayout(new String(newsContent.bodytext));
+    }
+
+    private void initCollectState() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ((ActionMenuItemView) mToolbar.findViewById(R.id.action_collect)).setIcon(getResources().getDrawable(mIsCollected ? R.drawable.ic_uncollect : R.drawable.ic_collect));
+            }
+        }, 100);
+    }
+
+    private void updateCollectState() {
+        mDBHelper.updateNewsIsCollected(mSid, !mIsCollected);
+        if (mIsCollected) {
+            ((ActionMenuItemView) mToolbar.findViewById(R.id.action_collect)).setIcon(getResources().getDrawable(R.drawable.ic_collect));
+        } else {
+            ((ActionMenuItemView) mToolbar.findViewById(R.id.action_collect)).setIcon(getResources().getDrawable(R.drawable.ic_uncollect));
+        }
+        mIsCollected = !mIsCollected;
     }
 
     private void updateSummary(String text) {
