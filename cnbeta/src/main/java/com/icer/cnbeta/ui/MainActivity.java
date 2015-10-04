@@ -59,6 +59,8 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     @Override
     protected void onResume() {
         super.onResume();
+        if (mAdapter != null)
+            mAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -109,7 +109,6 @@ public class NewsListAdapter extends BaseAdapter {
         intent.putExtra(AppConstants.TITLE, newsInfo.title);
         intent.putExtra(AppConstants.PUBTIME, newsInfo.pubtime);
         ((BaseActivity) mContext).goToActivity(intent);
-        notifyDataSetChanged();
     }
 
     public String getLastSid() {
