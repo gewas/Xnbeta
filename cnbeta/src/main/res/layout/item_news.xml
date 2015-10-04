@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/item_content_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6.67dp"
+        android:layout_marginRight="6.67dp"
+        android:paddingLeft="6.67dp"
+        android:paddingRight="6.67dp">
+
+        <ImageView
+            android:id="@+id/item_thumb_iv"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentRight="true"
+            android:padding="6.67dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/item_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/item_thumb_iv"
+            android:maxLines="2"
+            android:paddingRight="6.67dp"
+            android:paddingTop="6.67dp"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/item_info_tv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignBottom="@id/item_thumb_iv"
+            android:layout_below="@id/item_title_tv"
+            android:layout_toLeftOf="@id/item_thumb_iv"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="@string/item_info"
+            android:textColor="@color/color_999999"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/item_summary_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_thumb_iv"
+            android:ellipsize="end"
+            android:lineSpacingMultiplier="1.2"
+            android:maxLines="3"
+            android:paddingBottom="6.67dp"
+            android:textColor="@color/color_333333"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/item_new_iv"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/ic_new"/>
+
+</RelativeLayout>

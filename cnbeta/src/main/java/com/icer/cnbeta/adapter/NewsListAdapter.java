@@ -26,16 +26,16 @@ import com.icer.cnbeta.volley.entity.NewsInfo;
 import java.io.File;
 import java.util.ArrayList;
 
-public class LatestListAdapter extends BaseAdapter {
+public class NewsListAdapter extends BaseAdapter {
 
-    public static final String TAG = LatestListAdapter.class.getCanonicalName();
+    public static final String TAG = NewsListAdapter.class.getCanonicalName();
     public static final int ID = TAG.hashCode();
 
     private Context mContext;
     private ArrayList<NewsInfo> mData;
     private DBHelper mDBHelper;
 
-    public LatestListAdapter(Context context, ArrayList<NewsInfo> data) {
+    public NewsListAdapter(Context context, ArrayList<NewsInfo> data) {
         mContext = context;
         mData = data;
     }
@@ -59,7 +59,7 @@ public class LatestListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_latest, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_news, parent, false);
             holder = new ViewHolder();
             holder.initView(convertView);
             convertView.setTag(holder);

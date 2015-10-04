@@ -15,7 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.icer.cnbeta.R;
-import com.icer.cnbeta.adapter.LatestListAdapter;
+import com.icer.cnbeta.adapter.NewsListAdapter;
 import com.icer.cnbeta.app.AppConstants;
 import com.icer.cnbeta.app.BaseActivity;
 import com.icer.cnbeta.db.DBHelper;
@@ -37,7 +37,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ListView mListView;
 
-    private LatestListAdapter mAdapter;
+    private NewsListAdapter mAdapter;
     private ArrayList<NewsInfo> mData;
 
     private DBHelper mDBHelper;
@@ -103,7 +103,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     }
 
     private void initAdapter() {
-        mAdapter = new LatestListAdapter(this, mData);
+        mAdapter = new NewsListAdapter(this, mData);
         mListView.setAdapter(mAdapter);
     }
 
