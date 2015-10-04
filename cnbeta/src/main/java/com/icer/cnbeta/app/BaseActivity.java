@@ -63,15 +63,7 @@ public class BaseActivity extends AppCompatActivity {
             mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    long nowMillis = System.currentTimeMillis();
-                    if (BaseActivity.this instanceof MainActivity) {
-                        if (nowMillis - mLastClickNavigationMillis > 2000) {
-                            mLastClickNavigationMillis = nowMillis;
-                            showToast(R.string.hint_double_click_finish);
-                        } else
-                            finish();
-                    } else
-                        finishActivity();
+                    finishActivity();
                 }
             });
             mToolbar.setTitleTextColor(getResources().getColor(R.color.color_white));
@@ -97,10 +89,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (BaseActivity.this instanceof MainActivity)
-                finish();
-            else
-                finishActivity();
+            finishActivity();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -176,7 +165,20 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void finishActivity() {
-        finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        if (BaseActivity.this instanceof MainActivity)
+            finishMainActivity();
+        else {
+            finish();
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
+    }
+
+    private void finishMainActivity() {
+        long nowMillis = System.currentTimeMillis();
+        if (nowMillis - mLastClickNavigationMillis > 2000) {
+            mLastClickNavigationMillis = nowMillis;
+            showToast(R.string.hint_double_click_finish);
+        } else
+            finish();
     }
 }
