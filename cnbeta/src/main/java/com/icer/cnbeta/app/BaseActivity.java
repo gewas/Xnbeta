@@ -160,7 +160,10 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void goToActivity(Intent intent) {
-        startActivity(intent);
+        if (intent.getIntExtra(AppConstants.POSITION, -1) != -1)
+            startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_COLLECTION);
+        else
+            startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 

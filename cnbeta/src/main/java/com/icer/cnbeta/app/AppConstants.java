@@ -10,7 +10,12 @@ public interface AppConstants {
     String TITLE = "title";
     String PUBTIME = "pubtime";
     String SUMMARY = "summary";
+    String POSITION = "POSITION";
 
+
+    int REQUEST_CODE_FOR_COLLECTION = 998;
+    int RESUET_CODE_COLLECT = 999;
+    int RESUET_CODE_UNCOLLECT = 1000;
 
     //hint
     String HINT_LOADING_FAILED = "Loading Failed...";

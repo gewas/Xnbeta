@@ -45,6 +45,7 @@ public class ContentActivity extends BaseActivity {
     private String mSid;
     private String mTitle;
     private String mPubtime;
+    private int mPosition;
     private boolean mIsCollected;
 
     private DBHelper mDBHelper;
@@ -96,6 +97,7 @@ public class ContentActivity extends BaseActivity {
         mSid = intent.getStringExtra(AppConstants.SID);
         mTitle = intent.getStringExtra(AppConstants.TITLE);
         mPubtime = intent.getStringExtra(AppConstants.PUBTIME);
+        mPosition = intent.getIntExtra(AppConstants.POSITION, -1);
         mDBHelper = new DBHelper(this);
         mIsCollected = mDBHelper.isNewsCollected(mSid);
     }
@@ -167,8 +169,12 @@ public class ContentActivity extends BaseActivity {
         mDBHelper.updateNewsIsCollected(mSid, !mIsCollected);
         if (mIsCollected) {
             ((ActionMenuItemView) mToolbar.findViewById(R.id.action_collect)).setIcon(getResources().getDrawable(R.drawable.ic_collect));
+            if (mPosition != -1)
+                setResult(AppConstants.RESUET_CODE_UNCOLLECT + mPosition);
         } else {
             ((ActionMenuItemView) mToolbar.findViewById(R.id.action_collect)).setIcon(getResources().getDrawable(R.drawable.ic_uncollect));
+            if (mPosition != -1)
+                setResult(AppConstants.RESUET_CODE_COLLECT);
         }
         mIsCollected = !mIsCollected;
     }

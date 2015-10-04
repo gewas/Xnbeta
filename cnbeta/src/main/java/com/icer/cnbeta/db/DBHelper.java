@@ -56,6 +56,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<NewsInfo> res = null;
         String selection = null;
         String[] selectionArgs = null;
+        String orderBy = DBConstant.TableList.COLUMN_SID + " DESC";
         if (lastSid != null) {
             selection = DBConstant.TableList.COLUMN_SID + "<?";
             selectionArgs = new String[]{lastSid};
@@ -63,8 +64,12 @@ public class DBHelper extends SQLiteOpenHelper {
         if (isCollected) {
             selection = DBConstant.TableList.COLUMN_IS_COLLECTED + "=?";
             selectionArgs = new String[]{true + ""};
+            if (lastSid != null) {
+                selection += " and " + DBConstant.TableList.COLUMN_SID + "<?";
+                selectionArgs = new String[]{true + "", lastSid};
+            }
         }
-        Cursor cursor = mResolver.query(Uri.parse(DBProvider.URI_LIST), null, selection, selectionArgs, DBConstant.TableList.COLUMN_SID + " DESC");
+        Cursor cursor = mResolver.query(Uri.parse(DBProvider.URI_LIST), null, selection, selectionArgs, orderBy);
         if (cursor != null) {
             int i = 0;
             while (cursor.moveToNext()) {

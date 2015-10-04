@@ -24,27 +24,17 @@
         <TextView
             android:id="@+id/item_title_tv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_alignBottom="@id/item_thumb_iv"
+            android:layout_alignTop="@id/item_thumb_iv"
             android:layout_toLeftOf="@id/item_thumb_iv"
-            android:maxLines="2"
+            android:gravity="center_vertical"
+            android:maxLines="3"
             android:paddingRight="6.67dp"
             android:paddingTop="6.67dp"
             android:textColor="@color/color_333333"
             android:textSize="16sp"
             android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/item_info_tv"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_alignBottom="@id/item_thumb_iv"
-            android:layout_below="@id/item_title_tv"
-            android:layout_toLeftOf="@id/item_thumb_iv"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:text="@string/item_info"
-            android:textColor="@color/color_999999"
-            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/item_summary_tv"
@@ -58,14 +48,4 @@
             android:textColor="@color/color_333333"
             android:textSize="14sp"/>
     </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/item_new_iv"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="4dp"
-        android:src="@drawable/ic_new"/>
-
 </RelativeLayout>
