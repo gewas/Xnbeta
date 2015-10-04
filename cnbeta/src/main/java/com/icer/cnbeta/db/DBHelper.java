@@ -96,6 +96,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void updateNewsInfoIsRead(NewsInfo newsInfo) {
         ContentValues values = new ContentValues();
         values.put(DBConstant.TableList.COLUMN_IS_READ, true + "");
+        values.put(DBConstant.UNIVERSAL_COLUMN_DB_UPDATE_TIME, System.currentTimeMillis() + "");
         updateNewsInfo(newsInfo, values);
     }
 
@@ -152,6 +153,7 @@ public class DBHelper extends SQLiteOpenHelper {
             values.remove(DBConstant.TableList.COLUMN_THUMB);
             values.remove(DBConstant.TableList.COLUMN_IS_READ);
             values.remove(DBConstant.TableList.COLUMN_IS_COLLECTED);
+            values.remove(DBConstant.UNIVERSAL_COLUMN_DB_UPDATE_TIME);
         }
         return values;
     }
@@ -159,6 +161,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void updateNewsIsCollected(String sid, boolean bool) {
         ContentValues values = new ContentValues();
         values.put(DBConstant.TableList.COLUMN_IS_COLLECTED, bool + "");
+        values.put(DBConstant.UNIVERSAL_COLUMN_DB_UPDATE_TIME, System.currentTimeMillis() + "");
         mResolver.update(Uri.parse(DBProvider.URI_LIST), values, DBConstant.TableList.COLUMN_SID + "=?", new String[]{sid});
     }
 
