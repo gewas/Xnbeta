@@ -34,7 +34,7 @@ public class RequestManager {
         return appRequestManager;
     }
 
-    public void requestLatest(String lastSid, Response.Listener<String> listener, Response.ErrorListener errorListener, Object tag) {
+    public void requestNews(String lastSid, Response.Listener<String> listener, Response.ErrorListener errorListener, Object tag) {
         StringRequest request = new StringRequest(URLUtil.getList(lastSid), listener, errorListener);
         request.setTag(tag);
         mRequestQueue.add(request);
@@ -42,6 +42,12 @@ public class RequestManager {
 
     public void requestContent(String sid, Response.Listener<String> listener, Response.ErrorListener errorListener, Object tag) {
         StringRequest request = new StringRequest(URLUtil.getContent(sid), listener, errorListener);
+        request.setTag(tag);
+        mRequestQueue.add(request);
+    }
+
+    public void requestComment(String page, String sid, Response.Listener<String> listener, Response.ErrorListener errorListener, Object tag) {
+        StringRequest request = new StringRequest(URLUtil.getComment(page, sid), listener, errorListener);
         request.setTag(tag);
         mRequestQueue.add(request);
     }

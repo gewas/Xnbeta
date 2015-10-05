@@ -82,7 +82,9 @@ public class ContentActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_comments:
-                goToActivity(new Intent(ContentActivity.this, CommentActivity.class));
+                Intent intent = new Intent(this, CommentActivity.class);
+                intent.putExtra(AppConstants.SID, mSid);
+                goToActivity(intent);
                 return true;
 
             case R.id.action_collect:

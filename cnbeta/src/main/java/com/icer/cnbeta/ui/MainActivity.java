@@ -131,7 +131,7 @@ public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             if (lastSid == null && !mSwipeRefreshLayout.isRefreshing())
                 startRefresh();
             mIsRequesting = true;
-            RequestManager.getInstance().requestLatest(lastSid, new Response.Listener<String>() {
+            RequestManager.getInstance().requestNews(lastSid, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String s) {
                     logI(TAG, s);

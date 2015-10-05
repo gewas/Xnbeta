@@ -17,6 +17,14 @@
     <!-- content factors -->
     <string name="content_source">稿源：</string>
 
+    <!-- comment factors -->
+    <string name="comment_floor_num">%s楼</string>
+    <string name="comment_time">评论时间：%s</string>
+    <string name="comment_username">匿名用户</string>
+    <string name="comment_reply_floor_num">回复%s楼</string>
+    <string name="comment_agree">赞同：%s</string>
+    <string name="comment_against">反对：%s</string>
+
     <!-- hint -->
     <string name="hint_double_click_finish">再次点击退出</string>
     <string name="hint_already_latest">小编罢工了啦（╯‵□′）╯︵┴─┴</string>
