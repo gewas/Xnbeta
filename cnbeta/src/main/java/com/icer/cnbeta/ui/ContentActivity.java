@@ -9,6 +9,7 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
@@ -25,6 +26,8 @@ import com.icer.cnbeta.manager.RequestManager;
 import com.icer.cnbeta.util.TextViewUtil;
 import com.icer.cnbeta.volley.NewsContentBean;
 import com.icer.cnbeta.volley.entity.NewsContent;
+
+import java.io.File;
 
 /**
  * Created by icer on 2015-09-28.
@@ -92,6 +95,11 @@ public class ContentActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public File getCacheDir() {
+        return getApplicationContext().getCacheDir();
     }
 
     private void initData() {
@@ -188,6 +196,8 @@ public class ContentActivity extends BaseActivity {
     private void addWebView2ContentLayout(String data) {
         String html = data;
         WebView wv = new WebView(this);
+        wv.setWebChromeClient(new WebChromeClient());
+        wv.getSettings().setLoadsImagesAutomatically(true);
         wv.getSettings().setJavaScriptEnabled(true);
         wv.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         wv.loadDataWithBaseURL(null, fixWebViewImage(fixWebViewWH(fixWebViewHW(html))), "text/html", "utf-8", null);
