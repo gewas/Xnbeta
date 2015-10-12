@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.icer.cnbeta.R;
 import com.icer.cnbeta.ui.MainActivity;
 
+import java.io.File;
+
 /**
  * Created by icer on 2015-09-24.
  */
@@ -53,6 +55,16 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mIsDestroyed = true;
+    }
+
+    @Override
+    public File getCacheDir() {
+        return getApplicationContext().getCacheDir();
+    }
+
+    @Override
+    public File getFilesDir() {
+        return getApplicationContext().getFilesDir();
     }
 
     private void initToolBar() {

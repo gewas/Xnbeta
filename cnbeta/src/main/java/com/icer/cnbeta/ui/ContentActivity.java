@@ -27,8 +27,6 @@ import com.icer.cnbeta.util.TextViewUtil;
 import com.icer.cnbeta.volley.NewsContentBean;
 import com.icer.cnbeta.volley.entity.NewsContent;
 
-import java.io.File;
-
 /**
  * Created by icer on 2015-09-28.
  */
@@ -95,11 +93,6 @@ public class ContentActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public File getCacheDir() {
-        return getApplicationContext().getCacheDir();
     }
 
     private void initData() {

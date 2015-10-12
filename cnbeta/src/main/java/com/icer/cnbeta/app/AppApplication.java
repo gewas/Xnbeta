@@ -21,6 +21,7 @@ public class AppApplication extends Application {
     //       when the application is uninstalled (Android 2.2 and higher)
     protected File extStorageAppBasePath;
     protected File extStorageAppCachePath;
+    protected File extStorageAppFilePath;
 
     @Override
     public void onCreate() {
@@ -28,7 +29,9 @@ public class AppApplication extends Application {
         initSingleton();
         initRequestQueue();
         initContentResolver();
+        initExtDir();
         initExtCacheDir();
+        initExtFileDir();
     }
 
     @Override
@@ -44,7 +47,16 @@ public class AppApplication extends Application {
         }
     }
 
-    private void initExtCacheDir() {
+    @Override
+    public File getFilesDir() {
+
+        if (extStorageAppFilePath != null)
+            return extStorageAppFilePath;
+        else
+            return super.getFilesDir();
+    }
+
+    private void initExtDir() {
         // Check if the external storage is writeable
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             // Retrieve the base path for the application in the external storage
@@ -56,6 +68,36 @@ public class AppApplication extends Application {
                         File.separator + "Android" + File.separator + "data" +
                         File.separator + getPackageName());
             }
+        }
+    }
+
+    private void initExtFileDir() {
+        // Check if the external storage is writeable
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+
+            if (extStorageAppBasePath != null) {
+                // {SD_PATH}/Android/data/your.package.name/file
+                extStorageAppFilePath = new File(extStorageAppBasePath.getAbsolutePath() +
+                        File.separator + "file");
+
+                boolean isFilePathAvailable = true;
+
+                if (!extStorageAppFilePath.exists()) {
+                    // Create the file path on the external storage
+                    isFilePathAvailable = extStorageAppFilePath.mkdirs();
+                }
+
+                if (!isFilePathAvailable) {
+                    // Unable to create the file path
+                    extStorageAppFilePath = null;
+                }
+            }
+        }
+    }
+
+    private void initExtCacheDir() {
+        // Check if the external storage is writeable
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 
             if (extStorageAppBasePath != null) {
                 // {SD_PATH}/Android/data/your.package.name/cache
