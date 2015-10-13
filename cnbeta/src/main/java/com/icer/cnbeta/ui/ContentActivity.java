@@ -48,6 +48,7 @@ public class ContentActivity extends BaseActivity {
     private String mPubtime;
     private int mPosition;
     private boolean mIsCollected;
+    private boolean mIsLoadFinish;
 
     private DBHelper mDBHelper;
 
@@ -63,7 +64,8 @@ public class ContentActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        LoadContentFromDB();
+        if (!mIsLoadFinish)
+            LoadContentFromDB();
     }
 
     @Override
@@ -195,6 +197,7 @@ public class ContentActivity extends BaseActivity {
         wv.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         wv.loadDataWithBaseURL(null, fixWebViewImage(fixWebViewWH(fixWebViewHW(html))), "text/html", "utf-8", null);
         mContentLl.addView(wv);
+        mIsLoadFinish = true;
     }
 
     private String fixWebViewHW(String htmlText) {
